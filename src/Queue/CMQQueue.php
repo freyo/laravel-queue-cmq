@@ -46,7 +46,7 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function push($job, $data = '', $queue = null)
     {
-        return $this->pushRaw($this->createPayload($job, $data), $queue, []);
+        return $this->pushRaw($this->createPayload($job, $data), $queue);
     }
 
     /**
@@ -62,9 +62,7 @@ class CMQQueue extends Queue implements QueueContract
     {
         $message = new Message($payload);
 
-        $delay = array_get($options['delay'], 0);
-
-        return $this->getQueue($queue)->send_message($message, $delay);
+        return $this->getQueue($queue)->send_message($message, array_get($options, 'delay', 0));
     }
 
     /**
@@ -106,5 +104,17 @@ class CMQQueue extends Queue implements QueueContract
     public function getQueue($queue = null)
     {
         return $this->account->get_queue($queue ?: $this->queueOptions['queue']);
+    }
+
+    /**
+     * Get the topic
+     *
+     * @param null $topic
+     *
+     * @return Driver\Topic
+     */
+    public function getTopic($topic = null)
+    {
+        return $this->account->get_topic($topic ?: $this->queueOptions['topic']);
     }
 }
