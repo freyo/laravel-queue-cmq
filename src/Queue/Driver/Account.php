@@ -123,7 +123,7 @@ class Account
         if ($offset == "") {
             $next_offset = count($ret_pkg['queueList']);
         } else {
-            $next_offset = $offset + count($ret_pkg['queueList']);
+            $next_offset = (int)$offset + count($ret_pkg['queueList']);
         }
         if ($next_offset >= $ret_pkg['totalCount']) {
             $next_offset = "";
@@ -166,7 +166,7 @@ class Account
         if ($offset == "") {
             $next_offset = count($resp['topicList']);
         } else {
-            $next_offset = $offset + count($resp['topicList']);
+            $next_offset = (int)$offset + count($resp['topicList']);
         }
         if ($next_offset >= $resp['totalCount']) {
             $next_offset = "";

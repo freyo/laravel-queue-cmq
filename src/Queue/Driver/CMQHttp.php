@@ -47,7 +47,6 @@ class CMQHttp
 
         if ($this->curl == NULL) {
             throw new CMQClientException("Curl init failed");
-            return;
         }
 
         $url = $this->host;

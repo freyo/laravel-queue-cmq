@@ -135,7 +135,7 @@ class CMQClient
         $requestId = $resp['requestId'];
 
         if ($code != 0) {
-            throw new CMQServerException($message = $message, $request_id = $requestId, $code = $code, $data = $resp);
+            throw new CMQServerException($message, $requestId, $code, $resp);
         }
     }
 

@@ -237,7 +237,7 @@ class Topic
         if ($offset == "") {
             $next_offset = count($resp['subscriptionList']);
         } else {
-            $next_offset = $offset + count($resp['subscriptionList']);
+            $next_offset = (int)$offset + count($resp['subscriptionList']);
         }
 
         if ($next_offset >= $resp['totalCount']) {
