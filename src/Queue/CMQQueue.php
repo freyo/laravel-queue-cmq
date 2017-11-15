@@ -62,7 +62,9 @@ class CMQQueue extends Queue implements QueueContract
     {
         $message = new Message($payload);
 
-        return $this->getQueue($queue)->send_message($message);
+        $delay = array_get($options['delay'], 0);
+
+        return $this->getQueue($queue)->send_message($message, $delay);
     }
 
     /**
