@@ -2,6 +2,8 @@
 
 namespace Freyo\LaravelQueueCMQ\Queue\Driver;
 
+use Exception;
+
 /**
  * Sign
  * 签名类
@@ -16,7 +18,8 @@ class Signature
      * @param  string $secretKey secretKey
      * @param  string $method    请求方法
      *
-     * @return
+     * @return string
+     * @throws Exception
      */
     public static function sign($srcStr, $secretKey, $method = 'HmacSHA1')
     {
@@ -29,7 +32,6 @@ class Signature
                 break;
             default:
                 throw new Exception($method . ' is not a supported encrypt method');
-                return false;
                 break;
         }
 
@@ -43,13 +45,13 @@ class Signature
      *
      * @param  array  $requestParams 请求参数
      * @param  string $requestMethod 请求方法
-     * @param  string $requestHost   接口域名
+     * @param string  $requestHost   接口域名
      * @param  string $requestPath   url路径
      *
-     * @return
+     * @return string
      */
     public static function makeSignPlainText($requestParams,
-        $requestMethod = 'POST', $requestHost = YUNAPI_URL,
+        $requestMethod = 'POST', $requestHost = '',
         $requestPath = '/v2/index.php')
     {
 
@@ -70,7 +72,7 @@ class Signature
      * @param  array  $requestParams 请求参数
      * @param  string $requestMethod 请求方法
      *
-     * @return
+     * @return string
      */
     protected static function _buildParamStr($requestParams, $requestMethod = 'POST')
     {

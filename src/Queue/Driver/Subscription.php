@@ -9,7 +9,7 @@ class Subscription
     private $cmq_client;
     private $encoding;
 
-    public function __construct($topic_name, $subscription_name, $cmq_client, $encoding = false)
+    public function __construct($topic_name, $subscription_name, CMQClient $cmq_client, $encoding = false)
     {
         $this->topic_name        = $topic_name;
         $this->subscription_name = $subscription_name;
