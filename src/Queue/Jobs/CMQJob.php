@@ -42,4 +42,38 @@ class CMQJob extends Job implements JobContract
     {
         return $this->message->dequeueCount;
     }
+
+    /**
+     * Fire the job.
+     *
+     * @return void
+     */
+    public function fire()
+    {
+        parent::fire();
+    }
+
+    /**
+     * Delete the job from the queue.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        parent::delete();
+
+        $this->connection->getQueue()->delete_message($this->message->msgId);
+    }
+
+    /**
+     * Release the job back into the queue.
+     *
+     * @param  int $delay
+     *
+     * @return void
+     */
+    public function release($delay = 0)
+    {
+        parent::release($delay);
+    }
 }
