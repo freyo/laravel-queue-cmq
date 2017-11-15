@@ -62,7 +62,7 @@ class CMQJob extends Job implements JobContract
     {
         parent::delete();
 
-        $this->connection->getQueue()->delete_message($this->message->msgId);
+        $this->connection->getQueue()->delete_message($this->message->receiptHandle);
     }
 
     /**
