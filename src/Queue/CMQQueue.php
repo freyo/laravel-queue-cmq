@@ -11,11 +11,14 @@ use Illuminate\Queue\Queue;
 class CMQQueue extends Queue implements QueueContract
 {
 
+    protected $queueOptions;
+
     private $account;
 
     public function __construct(Account $account, array $config)
     {
-        $this->account = $account;
+        $this->account      = $account;
+        $this->queueOptions = $config;
     }
 
     /**
@@ -27,7 +30,7 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function size($queue = null)
     {
-        $attributes = $this->account->get_queue($queue)->get_attributes();
+        $attributes = $this->getQueue($queue)->get_attributes();
 
         return (int)$attributes->activeMsgNum;
     }
@@ -59,7 +62,7 @@ class CMQQueue extends Queue implements QueueContract
     {
         $message = new Message($payload);
 
-        return $this->account->get_queue($queue)->send_message($message);
+        return $this->getQueue($queue)->send_message($message);
     }
 
     /**
@@ -86,8 +89,20 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function pop($queue = null)
     {
-        $message = $this->account->get_queue($queue)->receive_message(0);
+        $message = $this->getQueue($queue)->receive_message(0);
 
         return new CMQJob($this->container, $this, $message);
+    }
+
+    /**
+     * Get the queue
+     *
+     * @param null $queue
+     *
+     * @return Driver\Queue
+     */
+    public function getQueue($queue = null)
+    {
+        return $this->account->get_queue($queue ?: $this->queueOptions['queue']);
     }
 }

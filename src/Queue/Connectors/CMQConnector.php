@@ -32,7 +32,7 @@ class CMQConnector implements ConnectorInterface
     {
         $account = new Account($config['host'], $config['secret_id'], $config['secret_key']);
 
-        $this->dispatcher->listen(WorkerStopping::class, function () use ($account) {
+        $this->dispatcher->listen(WorkerStopping::class, function () use (&$account) {
             unset($account);
         });
 
