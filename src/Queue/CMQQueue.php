@@ -78,14 +78,14 @@ class CMQQueue extends Queue implements QueueContract
 
         if ($driver instanceof Topic) {
 
-            $vTagList   = [];
+            $vTagList = [];
+            if ($this->topicOptions['filter'] === 'msgtag') {
+                $vTagList = explode(',', $queue);
+            }
+
             $routingKey = null;
-            foreach (explode(',', $queue) as $item) {
-                if (str_contains($item, ['.', '*', '#'])) {
-                    $routingKey = $item;
-                } else {
-                    $vTagList[] = $item;
-                }
+            if ($this->topicOptions['filter'] === 'routing') {
+                $routingKey = $queue;
             }
 
             return $driver->publish_message($message, $vTagList, $routingKey);
