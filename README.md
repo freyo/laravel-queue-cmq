@@ -14,6 +14,37 @@ Tencent Qcloud CMQ driver for Laravel Queue
   composer require freyo/laravel-queue-cmq
   ```
 
+## Configure
+
+1. `config/app.php`:
+
+  ```php
+  'providers' => [
+    // ...
+    Freyo\LaravelQueueCMQ\LaravelQueueCMQServiceProvider::class,
+  ]
+  ```
+  
+2. `.env`:
+
+  ```php
+  CMQ_SECRET_KEY
+  CMQ_SECRET_ID
+  
+  CMQ_QUEUE_HOST
+  CMQ_QUEUE
+  
+  CMQ_TOPIC_ENABLE
+  CMQ_TOPIC_FILTER
+  CMQ_TOPIC_HOST
+  CMQ_TOPIC
+  ```
+  
+## Document
+
+- [服务简介](https://cloud.tencent.com/document/api/406/5853)
+- [使用常见问题](https://cloud.tencent.com/document/api/406/8408)
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
