@@ -9,6 +9,7 @@ return [
     'driver'     => 'cmq',
     'secret_key' => env('CMQ_SECRET_KEY', 'your-secret-key'),
     'secret_id'  => env('CMQ_SECRET_ID', 'your-secret-id'),
-    'host'       => env('CMQ_HOST', 'https://cmq-queue-region.api.qcloud.com'),
+    'host'       => env('CMQ_HOST', 'https://cmq-queue-region.api.qcloud.com'), //https://cmq-topic-region.api.qcloud.com
     'queue'      => env('CMQ_QUEUE', 'default'),
+    'topic'      => env('CMQ_TOPIC'), //if you don't use topic, set to null
 ];
