@@ -73,8 +73,15 @@ class CMQQueue extends Queue implements QueueContract
 
         if ($driver instanceof Topic) {
 
-            $routingKey = str_contains($queue, ['.', '*', '#']) ? $queue : null;
-            $vTagList   = explode(',', $queue);
+            $vTagList   = [];
+            $routingKey = null;
+            foreach (explode(',', $queue) as $item) {
+                if (str_contains($item, ['.', '*', '#'])) {
+                    $routingKey = $item;
+                } else {
+                    $vTagList[] = $item;
+                }
+            }
 
             return $driver->publish_message($message, $vTagList, $routingKey);
         }
