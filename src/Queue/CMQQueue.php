@@ -4,6 +4,7 @@ namespace Freyo\LaravelQueueCMQ\Queue;
 
 use Freyo\LaravelQueueCMQ\Queue\Driver\Account;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Message;
+use Freyo\LaravelQueueCMQ\Queue\Driver\Topic;
 use Freyo\LaravelQueueCMQ\Queue\Jobs\CMQJob;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\Queue;
@@ -11,14 +12,20 @@ use Illuminate\Queue\Queue;
 class CMQQueue extends Queue implements QueueContract
 {
 
-    protected $queueOptions;
+    /**
+     * @var array
+     */
+    protected $config;
 
+    /**
+     * @var Account
+     */
     private $account;
 
     public function __construct(Account $account, array $config)
     {
-        $this->account      = $account;
-        $this->queueOptions = $config;
+        $this->account = $account;
+        $this->config  = $config;
     }
 
     /**
@@ -62,7 +69,17 @@ class CMQQueue extends Queue implements QueueContract
     {
         $message = new Message($payload);
 
-        return $this->getQueue($queue)->send_message($message, array_get($options, 'delay', 0));
+        $driver = $this->parseQueue($queue);
+
+        if ($driver instanceof Topic) {
+
+            $routingKey = str_contains($queue, ['.', '*', '#']) ? $queue : null;
+            $vTagList   = explode(',', $queue);
+
+            return $driver->publish_message($message, $vTagList, $routingKey);
+        }
+
+        return $driver->send_message($message, array_get($options, 'delay', 0));
     }
 
     /**
@@ -97,24 +114,42 @@ class CMQQueue extends Queue implements QueueContract
     /**
      * Get the queue
      *
-     * @param null $queue
+     * @param string $queue
      *
      * @return Driver\Queue
      */
     public function getQueue($queue = null)
     {
-        return $this->account->get_queue($queue ?: $this->queueOptions['queue']);
+        return $this->account->get_queue($queue ?: $this->config['queue']);
     }
 
     /**
      * Get the topic
      *
-     * @param null $topic
+     * @param string $topic
      *
      * @return Driver\Topic
      */
     public function getTopic($topic = null)
     {
-        return $this->account->get_topic($topic ?: $this->queueOptions['topic']);
+        return $this->account->get_topic($topic);
+    }
+
+    /**
+     * Parse name to topic or queue
+     *
+     * @param string $queue
+     *
+     * @return Driver\Queue|Driver\Topic
+     */
+    public function parseQueue($queue = null)
+    {
+        if ($this->config['topic']) {
+            $exchangeName = $this->config['topic'] ?: $queue;
+            return $this->getTopic($exchangeName);
+        }
+
+        $queueName = $queue ?: $this->config['queue'];
+        return $this->getQueue($queueName);
     }
 }
