@@ -4,6 +4,8 @@
 [![Packagist Version](https://img.shields.io/packagist/v/freyo/laravel-queue-cmq.svg?style=flat-square)](https://packagist.org/packages/freyo/laravel-queue-cmq)
 [![Total Downloads](https://img.shields.io/packagist/dt/freyo/laravel-queue-cmq.svg?style=flat-square)](https://packagist.org/packages/freyo/laravel-queue-cmq)
 
+![image](https://mc.qcloudimg.com/static/img/11e7440091583c474862d471936efe64/MQ-16.svg)
+
 Tencent Qcloud CMQ driver for Laravel Queue
 
 腾讯云 CMQ 消息队列
