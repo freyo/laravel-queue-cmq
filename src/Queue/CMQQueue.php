@@ -15,17 +15,22 @@ class CMQQueue extends Queue implements QueueContract
     /**
      * @var array
      */
-    protected $config;
+    protected $queueOptions;
+    protected $topicOptions;
 
     /**
      * @var Account
      */
-    private $account;
+    private $queueAccount;
+    private $topicAccount;
 
-    public function __construct(Account $account, array $config)
+    public function __construct(Account $queueAccount, Account $topicAccount, array $config)
     {
-        $this->account = $account;
-        $this->config  = $config;
+        $this->queueAccount = $queueAccount;
+        $this->topicAccount = $topicAccount;
+
+        $this->queueOptions = $config['options']['queue'];
+        $this->topicOptions = $config['options']['topic'];
     }
 
     /**
@@ -127,7 +132,7 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function getQueue($queue = null)
     {
-        return $this->account->get_queue($queue ?: $this->config['queue']);
+        return $this->queueAccount->get_queue($queue ?: $this->queueOptions['name']);
     }
 
     /**
@@ -139,7 +144,7 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function getTopic($topic = null)
     {
-        return $this->account->get_topic($topic);
+        return $this->topicAccount->get_topic($topic ?: $this->topicOptions['name']);
     }
 
     /**
@@ -151,12 +156,12 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function parseQueue($queue = null)
     {
-        if ($this->config['topic']) {
-            $exchangeName = $this->config['topic'] ?: $queue;
+        if ($this->topicOptions['enable']) {
+            $exchangeName = $this->topicOptions['name'] ?: $queue;
             return $this->getTopic($exchangeName);
         }
 
-        $queueName = $queue ?: $this->config['queue'];
+        $queueName = $queue ?: $this->queueOptions['name'];
         return $this->getQueue($queueName);
     }
 }
