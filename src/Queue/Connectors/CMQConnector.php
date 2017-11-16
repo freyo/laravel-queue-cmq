@@ -30,12 +30,14 @@ class CMQConnector implements ConnectorInterface
      */
     public function connect(array $config)
     {
-        $account = new Account($config['host'], $config['secret_id'], $config['secret_key']);
+        $queue = new Account(array_get($config, 'options.queue.host'), $config['secret_id'], $config['secret_key']);
 
-        $this->dispatcher->listen(WorkerStopping::class, function () use (&$account) {
-            unset($account);
+        $topic = new Account(array_get($config, 'options.topic.host'), $config['secret_id'], $config['secret_key']);
+
+        $this->dispatcher->listen(WorkerStopping::class, function () {
+            //
         });
 
-        return new CMQQueue($account, $config);
+        return new CMQQueue($queue, $topic, $config);
     }
 }
