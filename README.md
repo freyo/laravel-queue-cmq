@@ -13,3 +13,7 @@ Tencent Qcloud CMQ driver for Laravel Queue
   ```shell
   composer require freyo/laravel-queue-cmq
   ```
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
