@@ -18,9 +18,10 @@ return [
             'name' => env('CMQ_QUEUE', 'default'),
         ],
         'topic' => [
+            'enable' => env('CMQ_TOPIC_ENABLE', false),
+            'filter' => env('CMQ_TOPIC_FILTER', 'routing'), //routing or msgtag
             'host'   => env('CMQ_TOPIC_HOST', 'https://cmq-topic-region.api.qcloud.com'),
             'name'   => env('CMQ_TOPIC'),
-            'enable' => env('CMQ_TOPIC_ENABLE', false),
         ],
     ],
 
