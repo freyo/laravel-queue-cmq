@@ -27,5 +27,12 @@
             "email": "freyhsiao@gmail.com"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Freyo\\LaravelQueueCMQ\\LaravelQueueCMQServiceProvider"
+            ]
+        }
+    }
 }
