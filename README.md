@@ -29,18 +29,28 @@ Tencent Cloud Message Queue driver for Laravel Queue
   
 2. `.env`:
 
-  ```php
-  CMQ_SECRET_KEY
-  CMQ_SECRET_ID
-  
-  CMQ_QUEUE_HOST
-  CMQ_QUEUE
-  
-  CMQ_TOPIC_ENABLE
-  CMQ_TOPIC_FILTER
-  CMQ_TOPIC_HOST
-  CMQ_TOPIC
   ```
+  QUEUE_DRIVER=cmq
+  
+  CMQ_SECRET_KEY=
+  CMQ_SECRET_ID=
+  
+  CMQ_QUEUE_HOST=https://cmq-queue-region.api.qcloud.com
+  CMQ_QUEUE=queue_name
+  
+  CMQ_TOPIC_ENABLE=false # if you want to to use topic, set to true
+  CMQ_TOPIC_FILTER=routing # or msgtag
+  CMQ_TOPIC_HOST=https://cmq-topic-region.api.qcloud.com
+  CMQ_TOPIC=topic_name
+  ```
+  
+#### Tips
+  
+- Region should be replaced with a specific region: gz (Guangzhou), sh (Shanghai), or bj (Beijing).
+  
+- Domain for public network API request: cmq-queue-region.api.qcloud.com / cmq-topic-region.api.qcloud.com
+  
+- Domain for private network API request: cmq-queue-region.api.tencentyun.com / cmq-topic-region.api.tencentyun.com
   
 ## Usage
 
