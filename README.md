@@ -38,7 +38,7 @@ Tencent Cloud Message Queue driver for Laravel Queue
   CMQ_QUEUE_HOST=https://cmq-queue-region.api.qcloud.com
   CMQ_QUEUE=queue_name
   
-  CMQ_TOPIC_ENABLE=false # if you want to to use topic, set to true
+  CMQ_TOPIC_ENABLE=false # set to true to use topic
   CMQ_TOPIC_FILTER=routing # or msgtag
   CMQ_TOPIC_HOST=https://cmq-topic-region.api.qcloud.com
   CMQ_TOPIC=topic_name
