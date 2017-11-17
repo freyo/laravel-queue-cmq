@@ -88,7 +88,7 @@ class CMQQueue extends Queue implements QueueContract
                 $routingKey = $queue;
             }
 
-            return $driver->publish_message($message, $vTagList, $routingKey);
+            return $driver->publish_message($message->msgBody, $vTagList, $routingKey);
         }
 
         return $driver->send_message($message, array_get($options, 'delay', 0));
