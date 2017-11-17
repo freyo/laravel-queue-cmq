@@ -3,6 +3,7 @@
 namespace Freyo\LaravelQueueCMQ\Queue;
 
 use Freyo\LaravelQueueCMQ\Queue\Driver\Account;
+use Freyo\LaravelQueueCMQ\Queue\Driver\CMQServerException;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Message;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Topic;
 use Freyo\LaravelQueueCMQ\Queue\Jobs\CMQJob;
@@ -118,7 +119,14 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function pop($queue = null)
     {
-        $message = $this->getQueue($queue)->receive_message(0);
+        try {
+            $message = $this->getQueue($queue)->receive_message($this->queueOptions['polling_wait_seconds']);
+        } catch (CMQServerException $e) {
+            if ($e->getCode() == 7000) { //ignore no message
+                return null;
+            }
+            throw $e;
+        }
 
         return new CMQJob($this->container, $this, $message);
     }

@@ -16,6 +16,7 @@ return [
         'queue' => [
             'host' => env('CMQ_QUEUE_HOST', 'https://cmq-queue-region.api.qcloud.com'),
             'name' => env('CMQ_QUEUE', 'default'),
+            'polling_wait_seconds' => env('CMQ_QUEUE_POLLING_WAIT_SECONDS', 0), //0-30seconds
         ],
         'topic' => [
             'enable' => env('CMQ_TOPIC_ENABLE', false),
