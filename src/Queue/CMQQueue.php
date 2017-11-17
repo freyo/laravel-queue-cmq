@@ -13,6 +13,11 @@ use Illuminate\Queue\Queue;
 class CMQQueue extends Queue implements QueueContract
 {
 
+    const CMQ_QUEUE_NO_MESSAGE_CODE = 7000;
+
+    const CMQ_TOPIC_TAG_FILTER_NAME     = 'msgtag';
+    const CMQ_TOPIC_ROUTING_FILTER_NAME = 'routing';
+
     /**
      * @var array
      */
@@ -80,12 +85,12 @@ class CMQQueue extends Queue implements QueueContract
         if ($driver instanceof Topic) {
 
             $vTagList = [];
-            if ($this->topicOptions['filter'] === 'msgtag') {
+            if ($this->topicOptions['filter'] === self::CMQ_TOPIC_TAG_FILTER_NAME) {
                 $vTagList = explode(',', $queue);
             }
 
             $routingKey = null;
-            if ($this->topicOptions['filter'] === 'routing') {
+            if ($this->topicOptions['filter'] === self::CMQ_TOPIC_ROUTING_FILTER_NAME) {
                 $routingKey = $queue;
             }
 
@@ -122,7 +127,7 @@ class CMQQueue extends Queue implements QueueContract
         try {
             $message = $this->getQueue($queue)->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
-            if ($e->getCode() == 7000) { //ignore no message
+            if ($e->getCode() == self::CMQ_QUEUE_NO_MESSAGE_CODE) { //ignore no message
                 return null;
             }
             throw $e;
