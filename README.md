@@ -6,7 +6,7 @@
 
 ![image](https://mc.qcloudimg.com/static/img/7fc29d4e11d2ae302cf7f77d16c78f42/CMQ.svg)
 
-Tencent Qcloud CMQ driver for Laravel Queue
+Tencent Cloud Message Queue driver for Laravel Queue
 
 腾讯云 CMQ 消息队列
 
