@@ -44,7 +44,7 @@ Tencent Qcloud CMQ driver for Laravel Queue
   
 ## Document
 
-- [Overview](https://cloud.tencent.com/document/product/406)
+- [Overview](https://cloud.tencent.com/document/product/406?lang=en)
 
 ## License
 
