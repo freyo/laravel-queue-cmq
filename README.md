@@ -42,6 +42,23 @@ Tencent Cloud Message Queue driver for Laravel Queue
   CMQ_TOPIC
   ```
   
+## Usage
+
+Once you completed the configuration you can use Laravel Queue API. If you used other queue drivers you do not need to change anything else. If you do not know how to use Queue API, please refer to the official Laravel documentation: http://laravel.com/docs/queues
+
+#### Example
+
+  ```php
+  //use queue only
+  dispatch((new Job)->onQueue('queue-name'));
+  
+  //use topic and tag filter
+  dispatch((new Job)->onQueue('tag1,tag2,tag3'));
+  
+  //use topic and routing filter
+  dispatch((new Job)->onQueue('routing-key'));
+  ```
+
 ## Document
 
 - [Overview](https://cloud.tencent.com/document/product/406?lang=en)
