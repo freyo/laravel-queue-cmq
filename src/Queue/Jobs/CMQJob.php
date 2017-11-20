@@ -4,6 +4,7 @@ namespace Freyo\LaravelQueueCMQ\Queue\Jobs;
 
 use Freyo\LaravelQueueCMQ\Queue\CMQQueue;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Message;
+use Freyo\LaravelQueueCMQ\Queue\Driver\Queue;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Job as JobContract;
 use Illuminate\Database\DetectsDeadlocks;
@@ -16,11 +17,12 @@ class CMQJob extends Job implements JobContract
     protected $connection;
     protected $message;
 
-    public function __construct(Container $container, CMQQueue $connection, Message $message)
+    public function __construct(Container $container, CMQQueue $connection, Message $message, Queue $queue)
     {
         $this->container  = $container;
         $this->connection = $connection;
         $this->message    = $message;
+        $this->queue      = $queue->getQueueName();
     }
 
     /**
@@ -62,7 +64,7 @@ class CMQJob extends Job implements JobContract
     {
         parent::delete();
 
-        $this->connection->getQueue()->delete_message($this->message->receiptHandle);
+        $this->connection->getQueue($this->getQueue())->delete_message($this->message->receiptHandle);
     }
 
     /**
