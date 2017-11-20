@@ -15,6 +15,14 @@ class Queue
         $this->encoding   = $encoding;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getQueueName()
+    {
+        return $this->queue_name;
+    }
+
     /* 设置是否对消息体进行base64编码
 
         @type encoding: bool
