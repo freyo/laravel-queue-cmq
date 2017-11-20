@@ -12,6 +12,8 @@ return [
     'secret_key' => env('CMQ_SECRET_KEY', 'your-secret-key'),
     'secret_id'  => env('CMQ_SECRET_ID', 'your-secret-id'),
 
+    'queue' => env('CMQ_QUEUE', 'default'),
+
     'options' => [
         'queue' => [
             'host' => env('CMQ_QUEUE_HOST', 'https://cmq-queue-region.api.qcloud.com'),
