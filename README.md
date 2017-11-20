@@ -13,7 +13,7 @@ Tencent Cloud Message Queue driver for Laravel Queue
 ## Installation
 
   ```shell
-  composer require freyo/laravel-queue-cmq
+  composer require freyo/laravel-queue-cmq:5.4.*
   ```
 
 ## Configure
