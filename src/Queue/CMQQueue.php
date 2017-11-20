@@ -50,7 +50,7 @@ class CMQQueue extends Queue implements QueueContract
     {
         $attributes = $this->getQueue($queue)->get_attributes();
 
-        return (int)$attributes->activeMsgNum;
+        return (int) $attributes->activeMsgNum;
     }
 
     /**
@@ -125,7 +125,8 @@ class CMQQueue extends Queue implements QueueContract
     public function pop($queue = null)
     {
         try {
-            $message = $this->getQueue($queue)->receive_message($this->queueOptions['polling_wait_seconds']);
+            $queue   = $this->getQueue($queue);
+            $message = $queue->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
             if ($e->getCode() == self::CMQ_QUEUE_NO_MESSAGE_CODE) { //ignore no message
                 return null;
@@ -133,7 +134,7 @@ class CMQQueue extends Queue implements QueueContract
             throw $e;
         }
 
-        return new CMQJob($this->container, $this, $message);
+        return new CMQJob($this->container, $this, $message, $queue);
     }
 
     /**
