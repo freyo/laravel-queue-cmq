@@ -2,6 +2,8 @@
 
 namespace Freyo\LaravelQueueCMQ\Queue\Driver;
 
+use Illuminate\Support\Facades\Log;
+
 class CMQClient
 {
     private $host;
@@ -125,11 +127,14 @@ class CMQClient
 
     protected function check_status($resp_inter)
     {
+        Log::debug($resp_inter);
+
         if ($resp_inter->status != 200) {
             throw new CMQServerNetworkException($resp_inter->status, $resp_inter->header, $resp_inter->data);
         }
 
         $resp      = json_decode($resp_inter->data, TRUE);
+
         $code      = $resp['code'];
         $message   = $resp['message'];
         $requestId = $resp['requestId'];
