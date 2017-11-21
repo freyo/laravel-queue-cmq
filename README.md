@@ -37,6 +37,7 @@ Tencent Cloud Message Queue driver for Laravel Queue
   
   CMQ_QUEUE_HOST=https://cmq-queue-region.api.qcloud.com
   CMQ_QUEUE=queue_name
+  CMQ_QUEUE_POLLING_WAIT_SECONDS=30
   
   CMQ_TOPIC_ENABLE=false # set to true to use topic
   CMQ_TOPIC_FILTER=routing # or msgtag
