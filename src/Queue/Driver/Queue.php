@@ -248,7 +248,7 @@ class Queue
     {
 
         $params = array('queueName' => $this->queue_name);
-        if ($polling_wait_seconds != NULL) {
+        if ($polling_wait_seconds !== NULL) {
             $params['UserpollingWaitSeconds'] = $polling_wait_seconds;
             $params['pollingWaitSeconds']     = $polling_wait_seconds;
         } else {
