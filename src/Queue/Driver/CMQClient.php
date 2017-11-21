@@ -130,9 +130,10 @@ class CMQClient
         }
 
         $resp      = json_decode($resp_inter->data, TRUE);
+
         $code      = $resp['code'];
         $message   = $resp['message'];
-        $requestId = $resp['requestId'];
+        $requestId = isset($resp['requestId']) ? $resp['requestId'] : null;
 
         if ($code != 0) {
             throw new CMQServerException($message, $requestId, $code, $resp);
