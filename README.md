@@ -18,6 +18,8 @@ Tencent Cloud Message Queue driver for Laravel Queue
 
 ## Configure
 
+**Laravel 5.5 uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.**
+
 1. `config/app.php`:
 
   ```php
