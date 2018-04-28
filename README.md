@@ -18,7 +18,7 @@ Tencent Cloud Message Queue driver for Laravel Queue
 
 ## Configure
 
-**Laravel 5.5 uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.**
+**Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.**
 
 1. `config/app.php`:
 
@@ -63,13 +63,13 @@ Once you completed the configuration you can use Laravel Queue API. If you used 
 
   ```php
   //use queue only
-  dispatch((new Job)->onQueue('queue-name'));
+  Job::dispatch()->onQueue('queue-name');
   
   //use topic and tag filter
-  dispatch((new Job)->onQueue('tag1,tag2,tag3'));
+  Job::dispatch()->onQueue('tag1,tag2,tag3');
   
   //use topic and routing filter
-  dispatch((new Job)->onQueue('routing-key'));
+  Job::dispatch()->onQueue('routing-key');
   ```
 
 ## Document

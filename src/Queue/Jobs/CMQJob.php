@@ -26,6 +26,16 @@ class CMQJob extends Job implements JobContract
     }
 
     /**
+     * Get the job identifier.
+     *
+     * @return string
+     */
+    public function getJobId()
+    {
+        return $this->message->msgId;
+    }
+
+    /**
      * Get the raw body of the job.
      *
      * @return string
