@@ -65,6 +65,7 @@ class CMQHttp
         curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->connection_timeout + $userTimeout);
 
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->curl, CURLOPT_HTTPHEADER, array( 'Expect:' ) );
 
         if (false !== strpos($url, "https")) {
             // 证书
