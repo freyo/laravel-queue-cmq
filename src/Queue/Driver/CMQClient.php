@@ -117,8 +117,10 @@ class CMQClient
     protected function build_header(&$req_inter)
     {
         if ($this->http->is_keep_alive()) {
-            $req_inter->header["Connection"] = "Keep-Alive";
+            $req_inter->header[] = 'Connection: Keep-Alive';
         }
+
+        $req_inter->header[] = 'Expect:';
     }
 
 //===============================================queue operation===============================================
