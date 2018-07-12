@@ -1,15 +1,32 @@
-# CMQ Queue driver for Laravel
-
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Packagist Version](https://img.shields.io/packagist/v/freyo/laravel-queue-cmq.svg?style=flat-square)](https://packagist.org/packages/freyo/laravel-queue-cmq)
-[![Total Downloads](https://img.shields.io/packagist/dt/freyo/laravel-queue-cmq.svg?style=flat-square)](https://packagist.org/packages/freyo/laravel-queue-cmq)
-
-![image](https://mc.qcloudimg.com/static/img/7fc29d4e11d2ae302cf7f77d16c78f42/CMQ.svg)
-
-Tencent Cloud Message Queue driver for Laravel Queue
-
-腾讯云 CMQ 消息队列
-
+<div>
+  <p align="center">
+    <image src="https://mc.qcloudimg.com/static/img/7fc29d4e11d2ae302cf7f77d16c78f42/CMQ.svg" width="220" height="220">
+  </p>
+  <p align="center">
+    <a href="LICENSE">
+      <image src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License">
+    </a>
+    <a href="https://travis-ci.org/freyo/laravel-queue-cmq">
+      <image src="https://img.shields.io/travis/freyo/laravel-queue-cmq/master.svg?style=flat-square" alt="Build Status">
+    </a>
+    <a href="https://scrutinizer-ci.com/g/freyo/laravel-queue-cmq">
+      <image src="https://img.shields.io/scrutinizer/coverage/g/freyo/laravel-queue-cmq.svg?style=flat-square" alt="Coverage Status">
+    </a>
+    <a href="https://scrutinizer-ci.com/g/freyo/laravel-queue-cmq">
+      <image src="https://img.shields.io/scrutinizer/g/freyo/laravel-queue-cmq.svg?style=flat-square" alt="Quality Score">
+    </a>
+    <a href="https://packagist.org/packages/freyo/laravel-queue-cmq">
+      <image src="https://img.shields.io/packagist/v/freyo/laravel-queue-cmq.svg?style=flat-square" alt="Packagist Version">
+    </a>
+    <a href="https://packagist.org/packages/freyo/laravel-queue-cmq">
+      <image src="https://img.shields.io/packagist/dt/freyo/laravel-queue-cmq.svg?style=flat-square" alt="Total Downloads">
+    </a>
+  </p>
+  <p align="center">Tencent Cloud Message Queue driver for Laravel Queue</p>
+  <p align="center">腾讯云消息队列 CMQ</p>
+  <p align="center">安全可靠、扩展性高且业务可用性强的高性能分布式消息队列服务</p>
+</div>
+      
 ## Installation
 
   ```shell
