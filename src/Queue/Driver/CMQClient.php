@@ -12,27 +12,27 @@ class CMQClient
     private $method;
     private $URISEC = '/v2/index.php';
 
-    public function __construct($host, $secretId, $secretKey, $version = "SDK_PHP_1.3", $method = "POST")
+    public function __construct($host, $secretId, $secretKey, $version = 'SDK_PHP_1.3', $method = 'POST')
     {
         $this->process_host($host);
-        $this->secretId    = $secretId;
-        $this->secretKey   = $secretKey;
-        $this->version     = $version;
-        $this->method      = $method;
+        $this->secretId = $secretId;
+        $this->secretKey = $secretKey;
+        $this->version = $version;
+        $this->method = $method;
         $this->sign_method = 'HmacSHA1';
-        $this->http        = new CMQHttp($this->host);
+        $this->http = new CMQHttp($this->host);
     }
 
     protected function process_host($host)
     {
-        if (strpos($host, "http://") === 0) {
+        if (strpos($host, 'http://') === 0) {
             $_host = substr($host, 7, strlen($host) - 7);
-        } elseif (strpos($host, "https://") === 0) {
+        } elseif (strpos($host, 'https://') === 0) {
             $_host = substr($host, 8, strlen($host) - 8);
         } else {
-            throw new CMQClientParameterException("Only support http(s) prototol. Invalid endpoint:" . $host);
+            throw new CMQClientParameterException('Only support http(s) prototol. Invalid endpoint:'.$host);
         }
-        if ($_host[strlen($_host) - 1] == "/") {
+        if ($_host[strlen($_host) - 1] == '/') {
             $this->host = substr($_host, 0, strlen($_host) - 1);
         } else {
             $this->host = $_host;
@@ -41,13 +41,13 @@ class CMQClient
 
     public function set_sign_method($sign_method = 'sha1')
     {
-        if ($sign_method == 'sha1' || $sign_method == 'HmacSHA256')
+        if ($sign_method == 'sha1' || $sign_method == 'HmacSHA256') {
             $this->sign_method = 'HmacSHA1';
-        elseif ($sign_method == 'sha256')
+        } elseif ($sign_method == 'sha256') {
             $this->sign_method = 'HmacSHA256';
-        else
-            throw new CMQClientParameterException('Only support sign method HmasSHA256 or HmacSHA1 . Invalid sign method:' . $sign_method);
-
+        } else {
+            throw new CMQClientParameterException('Only support sign method HmasSHA256 or HmacSHA1 . Invalid sign method:'.$sign_method);
+        }
     }
 
     public function set_method($method = 'POST')
@@ -79,8 +79,8 @@ class CMQClient
 
         $iTimeout = 0;
 
-        if (array_key_exists("UserpollingWaitSeconds", $params)) {
-            $iTimeout = (int)$params['UserpollingWaitSeconds'];
+        if (array_key_exists('UserpollingWaitSeconds', $params)) {
+            $iTimeout = (int) $params['UserpollingWaitSeconds'];
         }
         // send request
         $resp_inter = $this->http->send_request($req_inter, $iTimeout);
@@ -90,23 +90,27 @@ class CMQClient
 
     protected function build_req_inter($action, $params, &$req_inter)
     {
-        $_params                  = $params;
-        $_params['Action']        = ucfirst($action);
+        $_params = $params;
+        $_params['Action'] = ucfirst($action);
         $_params['RequestClient'] = $this->version;
 
-        if (!isset($_params['SecretId']))
+        if (!isset($_params['SecretId'])) {
             $_params['SecretId'] = $this->secretId;
+        }
 
-        if (!isset($_params['Nonce']))
+        if (!isset($_params['Nonce'])) {
             $_params['Nonce'] = rand(1, 65535);
+        }
 
-        if (!isset($_params['Timestamp']))
+        if (!isset($_params['Timestamp'])) {
             $_params['Timestamp'] = time();
+        }
 
-        if (!isset($_params['SignatureMethod']))
+        if (!isset($_params['SignatureMethod'])) {
             $_params['SignatureMethod'] = $this->sign_method;
+        }
 
-        $plainText            = Signature::makeSignPlainText($_params,
+        $plainText = Signature::makeSignPlainText($_params,
             $this->method, $this->host, $req_inter->uri);
         $_params['Signature'] = Signature::sign($plainText, $this->secretKey, $this->sign_method);
 
@@ -123,7 +127,7 @@ class CMQClient
         $req_inter->header[] = 'Expect:';
     }
 
-//===============================================queue operation===============================================
+    //===============================================queue operation===============================================
 
     protected function check_status($resp_inter)
     {
@@ -131,10 +135,10 @@ class CMQClient
             throw new CMQServerNetworkException($resp_inter->status, $resp_inter->header, $resp_inter->data);
         }
 
-        $resp      = json_decode($resp_inter->data, TRUE);
+        $resp = json_decode($resp_inter->data, true);
 
-        $code      = $resp['code'];
-        $message   = $resp['message'];
+        $code = $resp['code'];
+        $message = $resp['message'];
         $requestId = isset($resp['requestId']) ? $resp['requestId'] : null;
 
         if ($code != 0) {
@@ -159,7 +163,8 @@ class CMQClient
         $resp_inter = $this->request('ListQueue', $params);
         $this->check_status($resp_inter);
 
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret;
     }
 
@@ -174,7 +179,8 @@ class CMQClient
         $resp_inter = $this->request('GetQueueAttributes', $params);
         $this->check_status($resp_inter);
 
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret;
     }
 
@@ -183,7 +189,8 @@ class CMQClient
         $resp_inter = $this->request('SendMessage', $params);
         $this->check_status($resp_inter);
 
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret['msgId'];
     }
 
@@ -192,7 +199,8 @@ class CMQClient
         $resp_inter = $this->request('BatchSendMessage', $params);
         $this->check_status($resp_inter);
 
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret['msgList'];
     }
 
@@ -201,7 +209,8 @@ class CMQClient
         $resp_inter = $this->request('ReceiveMessage', $params);
         $this->check_status($resp_inter);
 
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret;
     }
 
@@ -210,7 +219,8 @@ class CMQClient
         $resp_inter = $this->request('BatchReceiveMessage', $params);
         $this->check_status($resp_inter);
 
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret['msgInfoList'];
     }
 
@@ -230,92 +240,98 @@ class CMQClient
 
     public function create_topic($params)
     {
-        $resp_inter = $this->request("CreateTopic", $params);
+        $resp_inter = $this->request('CreateTopic', $params);
         $this->check_status($resp_inter);
     }
 
     public function delete_topic($params)
     {
-        $resp_inter = $this->request("DeleteTopic", $params);
+        $resp_inter = $this->request('DeleteTopic', $params);
         $this->check_status($resp_inter);
     }
 
     public function list_topic($params)
     {
-        $resp_inter = $this->request("ListTopic", $params);
+        $resp_inter = $this->request('ListTopic', $params);
         $this->check_status($resp_inter);
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret;
     }
 
     public function set_topic_attributes($params)
     {
-        $resp_inter = $this->request("SetTopicAttributes", $params);
+        $resp_inter = $this->request('SetTopicAttributes', $params);
         $this->check_status($resp_inter);
     }
 
     public function get_topic_attributes($params)
     {
-        $resp_inter = $this->request("GetTopicAttributes", $params);
+        $resp_inter = $this->request('GetTopicAttributes', $params);
         $this->check_status($resp_inter);
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret;
     }
 
     public function publish_message($params)
     {
-        $resp_inter = $this->request("PublishMessage", $params);
+        $resp_inter = $this->request('PublishMessage', $params);
         $this->check_status($resp_inter);
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret;
     }
 
     public function batch_publish_message($params)
     {
-        $resp_inter = $this->request("BatchPublishMessage", $params);
+        $resp_inter = $this->request('BatchPublishMessage', $params);
         $this->check_status($resp_inter);
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret;
     }
 
     //============================================subscription operation=============================================
     public function create_subscription($params)
     {
-        $resp_inter = $this->request("Subscribe", $params);
+        $resp_inter = $this->request('Subscribe', $params);
         $this->check_status($resp_inter);
     }
 
     public function clear_filterTags($params)
     {
-        $resp_inter = $this->request("ClearSubscriptionFilterTags", $params);
+        $resp_inter = $this->request('ClearSubscriptionFilterTags', $params);
         $this->check_status($resp_inter);
     }
 
     public function delete_subscription($params)
     {
-        $resp_inter = $this->request("Unsubscribe", $params);
+        $resp_inter = $this->request('Unsubscribe', $params);
         $this->check_status($resp_inter);
     }
 
     public function get_subscription_attributes($params)
     {
-        $resp_inter = $this->request("GetSubscriptionAttributes", $params);
+        $resp_inter = $this->request('GetSubscriptionAttributes', $params);
         $this->check_status($resp_inter);
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret;
     }
 
     public function set_subscription_attributes($params)
     {
-        $resp_inter = $this->request("SetSubscriptionAttributes", $params);
+        $resp_inter = $this->request('SetSubscriptionAttributes', $params);
         $this->check_status($resp_inter);
     }
 
     public function list_subscription($params)
     {
-        $resp_inter = $this->request("ListSubscriptionByTopic", $params);
+        $resp_inter = $this->request('ListSubscriptionByTopic', $params);
         $this->check_status($resp_inter);
-        $ret = json_decode($resp_inter->data, TRUE);
+        $ret = json_decode($resp_inter->data, true);
+
         return $ret;
     }
 }

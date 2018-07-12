@@ -2,7 +2,6 @@
 
 namespace Freyo\LaravelQueueCMQ\Queue\Driver;
 
-
 class CMQServerException extends CMQExceptionBase
 {
     /* cmq处理异常
@@ -26,7 +25,7 @@ class CMQServerException extends CMQExceptionBase
 
     public $request_id;
 
-    public function __construct($message, $request_id, $code = -1, $data = array())
+    public function __construct($message, $request_id, $code = -1, $data = [])
     {
         parent::__construct($message, $code, $data);
         $this->request_id = $request_id;
@@ -34,6 +33,6 @@ class CMQServerException extends CMQExceptionBase
 
     public function __toString()
     {
-        return "CMQServerException  " . $this->get_info() . ", RequestID:" . $this->request_id;
+        return 'CMQServerException  '.$this->get_info().', RequestID:'.$this->request_id;
     }
 }

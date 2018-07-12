@@ -12,10 +12,9 @@ use Illuminate\Queue\Queue;
 
 class CMQQueue extends Queue implements QueueContract
 {
-
     const CMQ_QUEUE_NO_MESSAGE_CODE = 7000;
 
-    const CMQ_TOPIC_TAG_FILTER_NAME     = 'msgtag';
+    const CMQ_TOPIC_TAG_FILTER_NAME = 'msgtag';
     const CMQ_TOPIC_ROUTING_FILTER_NAME = 'routing';
 
     /**
@@ -42,7 +41,7 @@ class CMQQueue extends Queue implements QueueContract
     /**
      * Get the size of the queue.
      *
-     * @param  string $queue
+     * @param string $queue
      *
      * @return int
      */
@@ -56,9 +55,9 @@ class CMQQueue extends Queue implements QueueContract
     /**
      * Push a new job onto the queue.
      *
-     * @param  string|object $job
-     * @param  mixed         $data
-     * @param  string        $queue
+     * @param string|object $job
+     * @param mixed         $data
+     * @param string        $queue
      *
      * @return mixed
      */
@@ -70,9 +69,9 @@ class CMQQueue extends Queue implements QueueContract
     /**
      * Push a raw payload onto the queue.
      *
-     * @param  string $payload
-     * @param  string $queue
-     * @param  array  $options
+     * @param string $payload
+     * @param string $queue
+     * @param array  $options
      *
      * @return mixed
      */
@@ -83,7 +82,6 @@ class CMQQueue extends Queue implements QueueContract
         $driver = $this->parseQueue($queue);
 
         if ($driver instanceof Topic) {
-
             $vTagList = [];
             if ($this->topicOptions['filter'] === self::CMQ_TOPIC_TAG_FILTER_NAME) {
                 $vTagList = explode(',', $queue);
@@ -103,10 +101,10 @@ class CMQQueue extends Queue implements QueueContract
     /**
      * Push a new job onto the queue after a delay.
      *
-     * @param  \DateTimeInterface|\DateInterval|int $delay
-     * @param  string|object                        $job
-     * @param  mixed                                $data
-     * @param  string                               $queue
+     * @param \DateTimeInterface|\DateInterval|int $delay
+     * @param string|object                        $job
+     * @param mixed                                $data
+     * @param string                               $queue
      *
      * @return mixed
      */
@@ -118,19 +116,20 @@ class CMQQueue extends Queue implements QueueContract
     /**
      * Pop the next job off of the queue.
      *
-     * @param  string $queue
+     * @param string $queue
      *
      * @return \Illuminate\Contracts\Queue\Job|null
      */
     public function pop($queue = null)
     {
         try {
-            $queue   = $this->getQueue($queue);
+            $queue = $this->getQueue($queue);
             $message = $queue->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
             if ($e->getCode() == self::CMQ_QUEUE_NO_MESSAGE_CODE) { //ignore no message
-                return null;
+                return;
             }
+
             throw $e;
         }
 
@@ -138,7 +137,7 @@ class CMQQueue extends Queue implements QueueContract
     }
 
     /**
-     * Get the queue
+     * Get the queue.
      *
      * @param string $queue
      *
@@ -150,7 +149,7 @@ class CMQQueue extends Queue implements QueueContract
     }
 
     /**
-     * Get the topic
+     * Get the topic.
      *
      * @param string $topic
      *
@@ -162,7 +161,7 @@ class CMQQueue extends Queue implements QueueContract
     }
 
     /**
-     * Parse name to topic or queue
+     * Parse name to topic or queue.
      *
      * @param string $queue
      *
@@ -172,10 +171,12 @@ class CMQQueue extends Queue implements QueueContract
     {
         if ($this->topicOptions['enable']) {
             $exchangeName = $this->topicOptions['name'] ?: $queue;
+
             return $this->getTopic($exchangeName);
         }
 
         $queueName = $queue ?: $this->queueOptions['name'];
+
         return $this->getQueue($queueName);
     }
 }

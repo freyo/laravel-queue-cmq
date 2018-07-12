@@ -19,10 +19,10 @@ class CMQJob extends Job implements JobContract
 
     public function __construct(Container $container, CMQQueue $connection, Message $message, Queue $queue)
     {
-        $this->container  = $container;
+        $this->container = $container;
         $this->connection = $connection;
-        $this->message    = $message;
-        $this->queue      = $queue->getQueueName();
+        $this->message = $message;
+        $this->queue = $queue->getQueueName();
     }
 
     /**
@@ -80,7 +80,7 @@ class CMQJob extends Job implements JobContract
     /**
      * Release the job back into the queue.
      *
-     * @param  int $delay
+     * @param int $delay
      *
      * @return void
      */

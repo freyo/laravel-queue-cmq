@@ -2,12 +2,12 @@
 
 namespace Freyo\LaravelQueueCMQ\Queue\Connectors;
 
+use Freyo\LaravelQueueCMQ\Queue\CMQQueue;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Account;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Queue\Connectors\ConnectorInterface;
 use Illuminate\Queue\Events\WorkerStopping;
-use Freyo\LaravelQueueCMQ\Queue\CMQQueue;
 
 class CMQConnector implements ConnectorInterface
 {
@@ -24,7 +24,7 @@ class CMQConnector implements ConnectorInterface
     /**
      * Establish a queue connection.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \Illuminate\Contracts\Queue\Queue
      */

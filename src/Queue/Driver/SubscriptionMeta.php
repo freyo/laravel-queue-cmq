@@ -21,27 +21,27 @@ class SubscriptionMeta
     public $NotifyStrategy;
     public $NotifyContentFormat;
 
-
     public function __construct()
     {
-        $this->Endpoint            = "";
-        $this->Protocol            = "";
-        $this->FilterTag           = array();
-        $this->NotifyStrategy      = "BACKOFF_RETRY";
-        $this->NotifyContentFormat = "JSON";
-        $this->bindindKey          = array();
+        $this->Endpoint = '';
+        $this->Protocol = '';
+        $this->FilterTag = [];
+        $this->NotifyStrategy = 'BACKOFF_RETRY';
+        $this->NotifyContentFormat = 'JSON';
+        $this->bindindKey = [];
     }
 
     public function __toString()
     {
-        $info = array(
-            "endpoint"            => $this->Endpoint,
-            "protocol"            => $this->Protocol,
-            "filterTag"           => $this->FilterTag,
-            "notifyStrategy"      => $this->NotifyStrategy,
-            "notifyContentFormat" => $this->NotifyContentFormat,
-            "bindingKey"          => $this->bindindKey,
-        );
+        $info = [
+            'endpoint'            => $this->Endpoint,
+            'protocol'            => $this->Protocol,
+            'filterTag'           => $this->FilterTag,
+            'notifyStrategy'      => $this->NotifyStrategy,
+            'notifyContentFormat' => $this->NotifyContentFormat,
+            'bindingKey'          => $this->bindindKey,
+        ];
+
         return json_encode($info);
     }
 }

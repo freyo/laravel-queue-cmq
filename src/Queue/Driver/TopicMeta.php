@@ -4,7 +4,6 @@ namespace Freyo\LaravelQueueCMQ\Queue\Driver;
 
 class TopicMeta
 {
-
     // default maxMsgSize  65536
     // default msgRetentionSeconds 86400, one day
 
@@ -24,22 +23,23 @@ class TopicMeta
 
     public function __construct()
     {
-        $this->maxMsgSize          = 65536;
+        $this->maxMsgSize = 65536;
         $this->msgRetentionSeconds = 86400;
-        $this->createTime          = 0;
-        $this->lastModifyTime      = 0;
-        $this->filterType          = 1;
+        $this->createTime = 0;
+        $this->lastModifyTime = 0;
+        $this->filterType = 1;
     }
 
     public function __toString()
     {
-        $info = array(
-            "maxMsgSize"          => $this->maxMsgSize,
-            "msgRetentionSeconds" => $this->msgRetentionSeconds,
-            "createTime"          => $this->createTime,
-            "lastModifyTime"      => $this->lastModifyTime,
-            "filterType"          => $this->filterType
-        );
+        $info = [
+            'maxMsgSize'          => $this->maxMsgSize,
+            'msgRetentionSeconds' => $this->msgRetentionSeconds,
+            'createTime'          => $this->createTime,
+            'lastModifyTime'      => $this->lastModifyTime,
+            'filterType'          => $this->filterType,
+        ];
+
         return json_encode($info);
     }
 }
