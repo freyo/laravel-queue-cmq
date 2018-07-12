@@ -9,23 +9,24 @@ class RequestInternal
     public $uri;
     public $data;
 
-    public function __construct($method = "", $uri = "", $header = NULL, $data = "")
+    public function __construct($method = '', $uri = '', $header = null, $data = '')
     {
-        if ($header == NULL) {
-            $header = array();
+        if ($header == null) {
+            $header = [];
         }
         $this->method = $method;
-        $this->uri    = $uri;
+        $this->uri = $uri;
         $this->header = $header;
-        $this->data   = $data;
+        $this->data = $data;
     }
 
     public function __toString()
     {
-        $info = array("method" => $this->method,
-                      "uri"    => $this->uri,
-                      "header" => json_encode($this->header),
-                      "data"   => $this->data);
+        $info = ['method'      => $this->method,
+                      'uri'    => $this->uri,
+                      'header' => json_encode($this->header),
+                      'data'   => $this->data, ];
+
         return json_encode($info);
     }
 }
