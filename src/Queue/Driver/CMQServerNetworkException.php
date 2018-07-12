@@ -10,22 +10,22 @@ class CMQServerNetworkException extends CMQExceptionBase
     public $header;
     public $data;
 
-    public function __construct($status = 200, $header = NULL, $data = "")
+    public function __construct($status = 200, $header = null, $data = '')
     {
-        if ($header == NULL) {
-            $header = array();
+        if ($header == null) {
+            $header = [];
         }
         $this->status = $status;
         $this->header = $header;
-        $this->data   = $data;
+        $this->data = $data;
     }
 
     public function __toString()
     {
-        $info = array("status" => $this->status,
-                      "header" => json_encode($this->header),
-                      "data"   => $this->data);
+        $info = ['status'      => $this->status,
+                      'header' => json_encode($this->header),
+                      'data'   => $this->data, ];
 
-        return "CMQServerNetworkException  " . json_encode($info);
+        return 'CMQServerNetworkException  '.json_encode($info);
     }
 }
