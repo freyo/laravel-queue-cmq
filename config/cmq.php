@@ -3,7 +3,7 @@
 /**
  * This is an example of queue connection configuration.
  * It will be merged into config/queue.php.
- * You need to set proper values in `.env`
+ * You need to set proper values in `.env`.
  */
 return [
 
@@ -16,8 +16,8 @@ return [
 
     'options' => [
         'queue' => [
-            'host' => env('CMQ_QUEUE_HOST', 'https://cmq-queue-region.api.qcloud.com'),
-            'name' => env('CMQ_QUEUE', 'default'),
+            'host'                 => env('CMQ_QUEUE_HOST', 'https://cmq-queue-region.api.qcloud.com'),
+            'name'                 => env('CMQ_QUEUE', 'default'),
             'polling_wait_seconds' => env('CMQ_QUEUE_POLLING_WAIT_SECONDS', 0), //0-30seconds
         ],
         'topic' => [

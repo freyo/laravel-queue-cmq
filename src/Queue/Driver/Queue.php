@@ -12,7 +12,7 @@ class Queue
     {
         $this->queue_name = $queue_name;
         $this->cmq_client = $cmq_client;
-        $this->encoding   = $encoding;
+        $this->encoding = $encoding;
     }
 
     /**
@@ -40,14 +40,14 @@ class Queue
     */
     public function create($queue_meta)
     {
-        $params = array(
+        $params = [
             'queueName'           => $this->queue_name,
             'pollingWaitSeconds'  => $queue_meta->pollingWaitSeconds,
             'visibilityTimeout'   => $queue_meta->visibilityTimeout,
             'maxMsgSize'          => $queue_meta->maxMsgSize,
             'msgRetentionSeconds' => $queue_meta->msgRetentionSeconds,
             'rewindSeconds'       => $queue_meta->rewindSeconds,
-        );
+        ];
         if ($queue_meta->maxMsgHeapNum > 0) {
             $params['maxMsgHeapNum'] = $queue_meta->maxMsgHeapNum;
         }
@@ -61,13 +61,14 @@ class Queue
     */
     public function get_attributes()
     {
-        $params                = array(
-            'queueName' => $this->queue_name
-        );
-        $resp                  = $this->cmq_client->get_queue_attributes($params);
-        $queue_meta            = new QueueMeta();
+        $params = [
+            'queueName' => $this->queue_name,
+        ];
+        $resp = $this->cmq_client->get_queue_attributes($params);
+        $queue_meta = new QueueMeta();
         $queue_meta->queueName = $this->queue_name;
         $this->__resp2meta__($queue_meta, $resp);
+
         return $queue_meta;
     }
 
@@ -121,19 +122,18 @@ class Queue
         if (isset($resp['delayMsgNum'])) {
             $queue_meta->delayMsgNum = $resp['delayMsgNum'];
         }
-
     }
 
     public function set_attributes($queue_meta)
     {
-        $params = array(
+        $params = [
             'queueName'           => $this->queue_name,
             'pollingWaitSeconds'  => $queue_meta->pollingWaitSeconds,
             'visibilityTimeout'   => $queue_meta->visibilityTimeout,
             'maxMsgSize'          => $queue_meta->maxMsgSize,
             'msgRetentionSeconds' => $queue_meta->msgRetentionSeconds,
-            'rewindSeconds'       => $queue_meta->rewindSeconds
-        );
+            'rewindSeconds'       => $queue_meta->rewindSeconds,
+        ];
         if ($queue_meta->maxMsgHeapNum > 0) {
             $params['maxMsgHeapNum'] = $queue_meta->maxMsgHeapNum;
         }
@@ -147,10 +147,10 @@ class Queue
 
     public function rewindQueue($backTrackingTime)
     {
-        $params = array(
+        $params = [
             'queueName'        => $this->queue_name,
-            'startConsumeTime' => $backTrackingTime
-        );
+            'startConsumeTime' => $backTrackingTime,
+        ];
         $this->cmq_client->rewindQueue($params);
     }
 
@@ -166,7 +166,7 @@ class Queue
 
     public function delete()
     {
-        $params = array('queueName' => $this->queue_name);
+        $params = ['queueName' => $this->queue_name];
         $this->cmq_client->delete_queue($params);
     }
 
@@ -186,14 +186,15 @@ class Queue
         } else {
             $msgBody = $message->msgBody;
         }
-        $params        = array(
+        $params = [
             'queueName'    => $this->queue_name,
             'msgBody'      => $msgBody,
-            'delaySeconds' => $delayTime
-        );
-        $msgId         = $this->cmq_client->send_message($params);
-        $retmsg        = new Message();
+            'delaySeconds' => $delayTime,
+        ];
+        $msgId = $this->cmq_client->send_message($params);
+        $retmsg = new Message();
         $retmsg->msgId = $msgId;
+
         return $retmsg;
     }
 
@@ -208,13 +209,13 @@ class Queue
 
     public function batch_send_message($messages, $delayTime = 0)
     {
-        $params = array(
+        $params = [
             'queueName'    => $this->queue_name,
-            'delaySeconds' => $delayTime
-        );
-        $n      = 1;
+            'delaySeconds' => $delayTime,
+        ];
+        $n = 1;
         foreach ($messages as $message) {
-            $key = 'msgBody.' . $n;
+            $key = 'msgBody.'.$n;
             if ($this->encoding) {
                 $params[$key] = base64_encode($message->msgBody);
             } else {
@@ -222,13 +223,14 @@ class Queue
             }
             $n += 1;
         }
-        $msgList        = $this->cmq_client->batch_send_message($params);
-        $retMessageList = array();
+        $msgList = $this->cmq_client->batch_send_message($params);
+        $retMessageList = [];
         foreach ($msgList as $msg) {
-            $retmsg            = new Message();
-            $retmsg->msgId     = $msg['msgId'];
-            $retMessageList [] = $retmsg;
+            $retmsg = new Message();
+            $retmsg->msgId = $msg['msgId'];
+            $retMessageList[] = $retmsg;
         }
+
         return $retMessageList;
     }
 
@@ -244,29 +246,29 @@ class Queue
         @return 多条消息的属性，包含消息的基本属性、临时句柄
     */
 
-    public function receive_message($polling_wait_seconds = NULL)
+    public function receive_message($polling_wait_seconds = null)
     {
-
-        $params = array('queueName' => $this->queue_name);
-        if ($polling_wait_seconds !== NULL) {
+        $params = ['queueName' => $this->queue_name];
+        if ($polling_wait_seconds !== null) {
             $params['UserpollingWaitSeconds'] = $polling_wait_seconds;
-            $params['pollingWaitSeconds']     = $polling_wait_seconds;
+            $params['pollingWaitSeconds'] = $polling_wait_seconds;
         } else {
             $params['UserpollingWaitSeconds'] = 30;
         }
         $resp = $this->cmq_client->receive_message($params);
-        $msg  = new Message();
+        $msg = new Message();
         if ($this->encoding) {
             $msg->msgBody = base64_decode($resp['msgBody']);
         } else {
             $msg->msgBody = $resp['msgBody'];
         }
-        $msg->msgId            = $resp['msgId'];
-        $msg->receiptHandle    = $resp['receiptHandle'];
-        $msg->enqueueTime      = $resp['enqueueTime'];
-        $msg->nextVisibleTime  = $resp['nextVisibleTime'];
-        $msg->dequeueCount     = $resp['dequeueCount'];
+        $msg->msgId = $resp['msgId'];
+        $msg->receiptHandle = $resp['receiptHandle'];
+        $msg->enqueueTime = $resp['enqueueTime'];
+        $msg->nextVisibleTime = $resp['nextVisibleTime'];
+        $msg->dequeueCount = $resp['dequeueCount'];
         $msg->firstDequeueTime = $resp['firstDequeueTime'];
+
         return $msg;
     }
 
@@ -276,17 +278,17 @@ class Queue
         @param receipt_handle: 最近一次操作该消息返回的临时句柄
     */
 
-    public function batch_receive_message($num_of_msg, $polling_wait_seconds = NULL)
+    public function batch_receive_message($num_of_msg, $polling_wait_seconds = null)
     {
-        $params = array('queueName' => $this->queue_name, 'numOfMsg' => $num_of_msg);
-        if ($polling_wait_seconds != NULL) {
+        $params = ['queueName' => $this->queue_name, 'numOfMsg' => $num_of_msg];
+        if ($polling_wait_seconds != null) {
             $params['UserpollingWaitSeconds'] = $polling_wait_seconds;
-            $params['pollingWaitSeconds']     = $polling_wait_seconds;
+            $params['pollingWaitSeconds'] = $polling_wait_seconds;
         } else {
             $params['UserpollingWaitSeconds'] = 30;
         }
-        $msgInfoList    = $this->cmq_client->batch_receive_message($params);
-        $retMessageList = array();
+        $msgInfoList = $this->cmq_client->batch_receive_message($params);
+        $retMessageList = [];
         foreach ($msgInfoList as $msg) {
             $retmsg = new Message();
             if ($this->encoding) {
@@ -294,14 +296,15 @@ class Queue
             } else {
                 $retmsg->msgBody = $msg['msgBody'];
             }
-            $retmsg->msgId            = $msg['msgId'];
-            $retmsg->receiptHandle    = $msg['receiptHandle'];
-            $retmsg->enqueueTime      = $msg['enqueueTime'];
-            $retmsg->nextVisibleTime  = $msg['nextVisibleTime'];
-            $retmsg->dequeueCount     = $msg['dequeueCount'];
+            $retmsg->msgId = $msg['msgId'];
+            $retmsg->receiptHandle = $msg['receiptHandle'];
+            $retmsg->enqueueTime = $msg['enqueueTime'];
+            $retmsg->nextVisibleTime = $msg['nextVisibleTime'];
+            $retmsg->dequeueCount = $msg['dequeueCount'];
             $retmsg->firstDequeueTime = $msg['firstDequeueTime'];
-            $retMessageList []        = $retmsg;
+            $retMessageList[] = $retmsg;
         }
+
         return $retMessageList;
     }
 
@@ -313,20 +316,19 @@ class Queue
 
     public function delete_message($receipt_handle)
     {
-        $params = array('queueName' => $this->queue_name, 'receiptHandle' => $receipt_handle);
+        $params = ['queueName' => $this->queue_name, 'receiptHandle' => $receipt_handle];
         $this->cmq_client->delete_message($params);
     }
 
     public function batch_delete_message($receipt_handle_list)
     {
-        $params = array('queueName' => $this->queue_name);
-        $n      = 1;
+        $params = ['queueName' => $this->queue_name];
+        $n = 1;
         foreach ($receipt_handle_list as $receipt_handle) {
-            $key          = 'receiptHandle.' . $n;
+            $key = 'receiptHandle.'.$n;
             $params[$key] = $receipt_handle;
-            $n            += 1;
+            $n += 1;
         }
         $this->cmq_client->batch_delete_message($params);
     }
 }
-

@@ -21,24 +21,25 @@ class CMQExceptionBase extends RuntimeException
     public $message;
     public $data;
 
-    public function __construct($message, $code = -1, $data = array())
+    public function __construct($message, $code = -1, $data = [])
     {
         parent::__construct($message, $code);
-        $this->code    = $code;
+        $this->code = $code;
         $this->message = $message;
-        $this->data    = $data;
+        $this->data = $data;
     }
 
     public function __toString()
     {
-        return "CMQExceptionBase  " . $this->get_info();
+        return 'CMQExceptionBase  '.$this->get_info();
     }
 
     public function get_info()
     {
-        $info = array("code"    => $this->code,
-                      "data"    => json_encode($this->data),
-                      "message" => $this->message);
+        $info = ['code'         => $this->code,
+                      'data'    => json_encode($this->data),
+                      'message' => $this->message, ];
+
         return json_encode($info);
     }
 }

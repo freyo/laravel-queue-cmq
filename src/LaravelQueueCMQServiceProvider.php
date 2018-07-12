@@ -2,9 +2,9 @@
 
 namespace Freyo\LaravelQueueCMQ;
 
+use Freyo\LaravelQueueCMQ\Queue\Connectors\CMQConnector;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Support\ServiceProvider;
-use Freyo\LaravelQueueCMQ\Queue\Connectors\CMQConnector;
 
 class LaravelQueueCMQServiceProvider extends ServiceProvider
 {
@@ -16,7 +16,7 @@ class LaravelQueueCMQServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/cmq.php', 'queue.connections.cmq'
+            __DIR__.'/../config/cmq.php', 'queue.connections.cmq'
         );
     }
 

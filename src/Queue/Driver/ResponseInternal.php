@@ -2,29 +2,28 @@
 
 namespace Freyo\LaravelQueueCMQ\Queue\Driver;
 
-
 class ResponseInternal
 {
     public $header;
     public $status;
     public $data;
 
-    public function __construct($status = 0, $header = NULL, $data = "")
+    public function __construct($status = 0, $header = null, $data = '')
     {
-        if ($header == NULL) {
-            $header = array();
+        if ($header == null) {
+            $header = [];
         }
         $this->status = $status;
         $this->header = $header;
-        $this->data   = $data;
+        $this->data = $data;
     }
 
     public function __toString()
     {
-        $info = array("status" => $this->status,
-                      "header" => json_encode($this->header),
-                      "data"   => $this->data);
+        $info = ['status'      => $this->status,
+                      'header' => json_encode($this->header),
+                      'data'   => $this->data, ];
+
         return json_encode($info);
     }
 }
-

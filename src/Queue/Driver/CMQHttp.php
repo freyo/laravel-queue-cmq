@@ -11,9 +11,9 @@ class CMQHttp
     public function __construct($host, $connection_timeout = 10, $keep_alive = true)
     {
         $this->connection_timeout = $connection_timeout;
-        $this->keep_alive         = $keep_alive;
-        $this->host               = $host . "" . "/v2/index.php";
-        $this->curl               = NULL;
+        $this->keep_alive = $keep_alive;
+        $this->host = $host.''.'/v2/index.php';
+        $this->curl = null;
     }
 
     public function set_method($method = 'POST')
@@ -41,12 +41,13 @@ class CMQHttp
         if (!$this->keep_alive) {
             $this->curl = curl_init();
         } else {
-            if ($this->curl == NULL)
+            if ($this->curl == null) {
                 $this->curl = curl_init();
+            }
         }
 
-        if ($this->curl == NULL) {
-            throw new CMQClientException("Curl init failed");
+        if ($this->curl == null) {
+            throw new CMQClientException('Curl init failed');
         }
 
         $url = $this->host;
@@ -54,7 +55,7 @@ class CMQHttp
             curl_setopt($this->curl, CURLOPT_POST, 1);
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $req_inter->data);
         } else {
-            $url .= $req_inter->uri . '?' . $req_inter->data;
+            $url .= $req_inter->uri.'?'.$req_inter->data;
         }
 
         if (isset($req_inter->header)) {
@@ -66,7 +67,7 @@ class CMQHttp
 
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
 
-        if (false !== strpos($url, "https")) {
+        if (false !== strpos($url, 'https')) {
             // 证书
             // curl_setopt($ch,CURLOPT_CAINFO,"ca.crt");
             curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -76,8 +77,9 @@ class CMQHttp
         if (curl_errno($this->curl)) {
             throw new CMQClientNetworkException(curl_error($this->curl));
         }
-        $info       = curl_getinfo($this->curl);
-        $resp_inter = new ResponseInternal($info['http_code'], NULL, $resultStr);
+        $info = curl_getinfo($this->curl);
+        $resp_inter = new ResponseInternal($info['http_code'], null, $resultStr);
+
         return $resp_inter;
     }
 }
