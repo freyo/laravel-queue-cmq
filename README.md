@@ -55,7 +55,7 @@
   CMQ_SECRET_ID=
   
   CMQ_QUEUE_HOST=https://cmq-queue-region.api.qcloud.com
-  CMQ_QUEUE=queue_name
+  CMQ_QUEUE=queue_name #default queue name
   CMQ_QUEUE_POLLING_WAIT_SECONDS=30
   
   CMQ_TOPIC_ENABLE=false # set to true to use topic
@@ -76,18 +76,58 @@
 
 Once you completed the configuration you can use Laravel Queue API. If you used other queue drivers you do not need to change anything else. If you do not know how to use Queue API, please refer to the official Laravel documentation: http://laravel.com/docs/queues
 
-#### Example
+### Example
+
+#### Dispatch Jobs
+
+The default connection name is `cmq`
 
   ```php
   //use queue only
-  Job::dispatch()->onQueue('queue-name');
+  Job::dispatch()->onConnection('connection-name')->onQueue('queue-name');
   
   //use topic and tag filter
-  Job::dispatch()->onQueue('tag1,tag2,tag3');
+  Job::dispatch()->onConnection('connection-name')->onQueue('tag1,tag2,tag3');
   
   //use topic and routing filter
-  Job::dispatch()->onQueue('routing-key');
+  Job::dispatch()->onConnection('connection-name')->onQueue('routing-key');
   ```
+
+#### Multiple Queues
+
+Configure `config/queue.php`
+
+```php
+'connections' => [
+    //...
+    'new-connection-name' => [
+        'driver' => 'cmq',
+        'secret_key' => 'your-secret-key',
+        'secret_id'  => 'your-secret-id',
+        'queue' => 'your-queue-name',
+        'options' => [
+            'queue' => [
+                'host'                 => 'https://cmq-queue-region.api.qcloud.com',
+                'name'                 => 'your-queue-name',
+                'polling_wait_seconds' => 0, // 0-30seconds
+            ],
+            'topic' => [
+                'enable' => false,
+                'filter' => 'routing', //routing or msgtag
+                'host'   => 'https://cmq-topic-region.api.qcloud.com',
+                'name'   => '',
+            ],
+        ],
+    ];
+    //...
+];
+```
+
+#### Process Jobs
+
+```bash
+php artisan queue:work {connection-name} --queue={queue-name}
+```
 
 ## Document
 
