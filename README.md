@@ -109,11 +109,11 @@ Configure `config/queue.php`
             'queue' => [
                 'host'                 => 'https://cmq-queue-region.api.qcloud.com',
                 'name'                 => 'your-queue-name',
-                'polling_wait_seconds' => 0, // 0-30seconds
+                'polling_wait_seconds' => 0, // 0-30 seconds
             ],
             'topic' => [
                 'enable' => false,
-                'filter' => 'routing', //routing or msgtag
+                'filter' => 'routing', // routing or msgtag
                 'host'   => 'https://cmq-topic-region.api.qcloud.com',
                 'name'   => '',
             ],
@@ -129,9 +129,10 @@ Configure `config/queue.php`
 php artisan queue:work {connection-name} --queue={queue-name}
 ```
 
-## Document
+## References
 
-- [Overview](https://cloud.tencent.com/document/product/406?lang=en)
+- [Product Documentation](https://cloud.tencent.com/document/product/406?lang=en)
+- [产品文档](https://cloud.tencent.com/document/product/406?lang=cn)
 
 ## License
 
