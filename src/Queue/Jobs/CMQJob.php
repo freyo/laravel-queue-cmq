@@ -7,13 +7,10 @@ use Freyo\LaravelQueueCMQ\Queue\Driver\Message;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Queue;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Job as JobContract;
-use Illuminate\Database\DetectsDeadlocks;
 use Illuminate\Queue\Jobs\Job;
 
 class CMQJob extends Job implements JobContract
 {
-    use DetectsDeadlocks;
-
     protected $connection;
     protected $message;
 
