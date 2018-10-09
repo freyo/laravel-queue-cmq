@@ -59,7 +59,9 @@ class CMQJob extends Job implements JobContract
      */
     public function fire()
     {
-        parent::fire();
+        method_exists($this, 'resolveAndFire') 
+            ? $this->resolveAndFire(json_decode($this->getRawBody(), true)) 
+            : parent::fire();
     }
 
     /**
