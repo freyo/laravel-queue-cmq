@@ -129,6 +129,65 @@ Configure `config/queue.php`
 php artisan queue:work {connection-name} --queue={queue-name}
 ```
 
+#### Plain Mode (Experimental)
+
+```
+CMQ_PLAIN_ENABLE=true
+CMQ_PLAIN_JOB=App\Jobs\CMQPlainJob@handle
+```
+
+```php
+<?php
+
+namespace App\Jobs;
+ 
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\Jobs\Job;
+
+class CMQPlainJob implements ShouldQueue
+{
+    use InteractsWithQueue, Queueable;
+    
+    protected $payload;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($payload)
+    {
+        $this->payload = $payload;
+    }
+    
+    /**
+     * Get the plain payload of the job.
+     *
+     * @return string
+     */
+    public function getPayload()
+    {
+        return $this->payload;
+    }
+    
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle(Job $job, $payload)
+    {
+        if (! $job->isDeletedOrReleased()) {
+            $job->delete();
+        }
+        
+        var_dump($payload);
+    }
+}
+```
+
 ## References
 
 - [Product Documentation](https://cloud.tencent.com/document/product/406?lang=en)

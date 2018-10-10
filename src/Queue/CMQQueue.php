@@ -9,6 +9,7 @@ use Freyo\LaravelQueueCMQ\Queue\Driver\Topic;
 use Freyo\LaravelQueueCMQ\Queue\Jobs\CMQJob;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\Queue;
+use Illuminate\Support\Arr;
 
 class CMQQueue extends Queue implements QueueContract
 {
@@ -29,6 +30,11 @@ class CMQQueue extends Queue implements QueueContract
     private $queueAccount;
     private $topicAccount;
 
+    /**
+     * @var array
+     */
+    protected $plainOptions;
+
     public function __construct(Account $queueAccount, Account $topicAccount, array $config)
     {
         $this->queueAccount = $queueAccount;
@@ -36,6 +42,24 @@ class CMQQueue extends Queue implements QueueContract
 
         $this->queueOptions = $config['options']['queue'];
         $this->topicOptions = $config['options']['topic'];
+
+        $this->plainOptions = Arr::get($config, 'plain', []);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPlain()
+    {
+        return Arr::get($this->plainOptions, 'enable', false);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlainJob()
+    {
+        return Arr::get($this->plainOptions, 'job');
     }
 
     /**
@@ -63,7 +87,9 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function push($job, $data = '', $queue = null)
     {
-        return $this->pushRaw($this->createPayload($job, $data), $queue);
+        $payload = $this->isPlain() ? $job->getPayload() : $this->createPayload($job, $data);
+
+        return $this->pushRaw($payload, $queue);
     }
 
     /**
