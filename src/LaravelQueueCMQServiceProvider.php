@@ -31,7 +31,7 @@ class LaravelQueueCMQServiceProvider extends ServiceProvider
         $queue = $this->app['queue'];
 
         $queue->addConnector('cmq', function () {
-            return new CMQConnector($this->app['events']);
+            return new CMQConnector();
         });
     }
 }
