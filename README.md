@@ -56,7 +56,7 @@
   
   CMQ_QUEUE_HOST=https://cmq-queue-region.api.qcloud.com
   CMQ_QUEUE=queue_name #default queue name
-  CMQ_QUEUE_POLLING_WAIT_SECONDS=30
+  CMQ_QUEUE_POLLING_WAIT_SECONDS=0
   
   CMQ_TOPIC_ENABLE=false # set to true to use topic
   CMQ_TOPIC_FILTER=routing # or msgtag
@@ -118,6 +118,10 @@ Configure `config/queue.php`
                 'name'   => '',
             ],
         ],
+        'plain' => [
+            'enable' => false,
+            'job' => 'App\Jobs\CMQPlainJob@handle',
+        ],
     ];
     //...
 ];
@@ -127,6 +131,65 @@ Configure `config/queue.php`
 
 ```bash
 php artisan queue:work {connection-name} --queue={queue-name}
+```
+
+#### Plain Mode (Experimental)
+
+```
+CMQ_PLAIN_ENABLE=true
+CMQ_PLAIN_JOB=App\Jobs\CMQPlainJob@handle
+```
+
+```php
+<?php
+
+namespace App\Jobs;
+ 
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\Jobs\Job;
+
+class CMQPlainJob implements ShouldQueue
+{
+    use InteractsWithQueue, Queueable;
+    
+    protected $payload;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($payload)
+    {
+        $this->payload = $payload;
+    }
+    
+    /**
+     * Get the plain payload of the job.
+     *
+     * @return string
+     */
+    public function getPayload()
+    {
+        return $this->payload;
+    }
+    
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle(Job $job, $payload)
+    {
+        if (! $job->isDeletedOrReleased()) {
+            $job->delete();
+        }
+        
+        var_dump($payload);
+    }
+}
 ```
 
 ## References
