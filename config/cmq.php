@@ -30,7 +30,7 @@ return [
 
     'plain' => [
         'enable' => env('CMQ_PLAIN_ENABLE', false),
-        'job' => env('CMQ_PLAIN_JOB', 'App\Jobs\CMQPlainJob@handle'),
+        'job'    => env('CMQ_PLAIN_JOB', 'App\Jobs\CMQPlainJob@handle'),
     ],
 
 ];

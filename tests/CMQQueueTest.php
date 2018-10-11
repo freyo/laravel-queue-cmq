@@ -2,8 +2,8 @@
 
 namespace Freyo\LaravelQueueCMQ\Tests;
 
-use Freyo\LaravelQueueCMQ\Queue\Connectors\CMQConnector;
 use Freyo\LaravelQueueCMQ\Queue\CMQQueue;
+use Freyo\LaravelQueueCMQ\Queue\Connectors\CMQConnector;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Message;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Queue;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Topic;
@@ -40,7 +40,7 @@ class CMQQueueTest extends TestCase
 
             'plain' => [
                 'enable' => env('CMQ_PLAIN_ENABLE', false),
-                'job' => env('CMQ_PLAIN_JOB', 'App\Jobs\CMQPlainJob@handle'),
+                'job'    => env('CMQ_PLAIN_JOB', 'App\Jobs\CMQPlainJob@handle'),
             ],
 
         ];

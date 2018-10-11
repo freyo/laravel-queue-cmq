@@ -72,15 +72,14 @@ class CMQJob extends Job implements JobContract
     public function payload()
     {
         if ($this->connection->isPlain()) {
-
             $job = $this->connection->getPlainJob();
 
             return [
                 'displayName' => is_string($job) ? explode('@', $job)[0] : null,
-                'job' => $job,
-                'maxTries' => null,
-                'timeout' => null,
-                'data' => $this->getRawBody(),
+                'job'         => $job,
+                'maxTries'    => null,
+                'timeout'     => null,
+                'data'        => $this->getRawBody(),
             ];
         }
 
