@@ -56,7 +56,7 @@
   
   CMQ_QUEUE_HOST=https://cmq-queue-region.api.qcloud.com
   CMQ_QUEUE=queue_name #default queue name
-  CMQ_QUEUE_POLLING_WAIT_SECONDS=30
+  CMQ_QUEUE_POLLING_WAIT_SECONDS=0
   
   CMQ_TOPIC_ENABLE=false # set to true to use topic
   CMQ_TOPIC_FILTER=routing # or msgtag
@@ -117,6 +117,10 @@ Configure `config/queue.php`
                 'host'   => 'https://cmq-topic-region.api.qcloud.com',
                 'name'   => '',
             ],
+        ],
+        'plain' => [
+            'enable' => false,
+            'job' => 'App\Jobs\CMQPlainJob@handle',
         ],
     ];
     //...
