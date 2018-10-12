@@ -54,13 +54,13 @@
   CMQ_SECRET_KEY=
   CMQ_SECRET_ID=
   
-  CMQ_QUEUE_HOST=https://cmq-queue-region.api.qcloud.com
+  CMQ_QUEUE_HOST=https://cmq-queue-{region}.api.qcloud.com
   CMQ_QUEUE=queue_name #default queue name
   CMQ_QUEUE_POLLING_WAIT_SECONDS=0
   
   CMQ_TOPIC_ENABLE=false # set to true to use topic
   CMQ_TOPIC_FILTER=routing # or msgtag
-  CMQ_TOPIC_HOST=https://cmq-topic-region.api.qcloud.com
+  CMQ_TOPIC_HOST=https://cmq-topic-{region}.api.qcloud.com
   CMQ_TOPIC=topic_name
   ```
   
