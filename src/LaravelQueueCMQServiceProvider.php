@@ -5,6 +5,7 @@ namespace Freyo\LaravelQueueCMQ;
 use Freyo\LaravelQueueCMQ\Queue\Connectors\CMQConnector;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Lumen\Application as LumenApplication;
 
 class LaravelQueueCMQServiceProvider extends ServiceProvider
 {
@@ -15,6 +16,10 @@ class LaravelQueueCMQServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        if ($this->app instanceof LumenApplication) {
+            $this->app->configure('queue');
+        }
+        
         $this->mergeConfigFrom(
             __DIR__.'/../config/cmq.php', 'queue.connections.cmq'
         );
