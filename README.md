@@ -137,7 +137,7 @@ php artisan queue:work {connection-name} --queue={queue-name}
 
 ```
 CMQ_PLAIN_ENABLE=true
-CMQ_PLAIN_JOB=App\Jobs\CMQPlainJob@handle
+CMQ_PLAIN_JOB=App\Jobs\CMQPlainJobHandler@handle
 ```
 
 ```php
@@ -175,7 +175,18 @@ class CMQPlainJob implements ShouldQueue
     {
         return $this->payload;
     }
-    
+}
+```
+
+```php
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Queue\Jobs\Job;
+
+class CMQPlainJobHandler
+{
     /**
      * Execute the job.
      *
