@@ -85,12 +85,15 @@ The default connection name is `cmq`
   ```php
   //use queue only
   Job::dispatch()->onConnection('connection-name')->onQueue('queue-name');
+  // or dispatch((new Job())->onConnection('connection-name')->onQueue('queue-name'))
   
   //use topic and tag filter
   Job::dispatch()->onConnection('connection-name')->onQueue('tag1,tag2,tag3');
+  // or dispatch((new Job())->onConnection('connection-name')->onQueue('tag1,tag2,tag3'))
   
   //use topic and routing filter
   Job::dispatch()->onConnection('connection-name')->onQueue('routing-key');
+  // or dispatch((new Job())->onConnection('connection-name')->onQueue('routing-key'))
   ```
 
 #### Multiple Queues
