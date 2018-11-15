@@ -136,24 +136,30 @@ Configure `config/queue.php`
 php artisan queue:work {connection-name} --queue={queue-name}
 ```
 
-#### Plain Mode (Experimental)
+#### Plain Mode
+
+Configure `.env`
 
 ```
 CMQ_PLAIN_ENABLE=true
 CMQ_PLAIN_JOB=App\Jobs\CMQPlainJobHandler@handle
 ```
 
+Create a job implements `PlainPayload` interface. 
+
+The method `getPayload` must return a sting value.
+
 ```php
 <?php
 
 namespace App\Jobs;
- 
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\Jobs\Job;
+use Freyo\LaravelQueueCMQ\Queue\Contracts\PlainPayload;
 
-class CMQPlainJob implements ShouldQueue
+class CMQPlainJob implements ShouldQueue, PlainPayload
 {
     use InteractsWithQueue, Queueable;
     
@@ -181,6 +187,8 @@ class CMQPlainJob implements ShouldQueue
 }
 ```
 
+Create a plain job handler
+
 ```php
 <?php
 
@@ -192,16 +200,21 @@ class CMQPlainJobHandler
 {
     /**
      * Execute the job.
-     *
+     * 
+     * @param \Illuminate\Queue\Jobs\Job $job
+     * @param string $payload
+     * 
      * @return void
      */
     public function handle(Job $job, $payload)
     {
+        // processing your payload...
+        var_dump($payload);
+        
+        // delete message when processed.
         if (! $job->isDeletedOrReleased()) {
             $job->delete();
-        }
-        
-        var_dump($payload);
+        }        
     }
 }
 ```
