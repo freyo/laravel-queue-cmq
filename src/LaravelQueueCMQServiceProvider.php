@@ -19,7 +19,7 @@ class LaravelQueueCMQServiceProvider extends ServiceProvider
         if ($this->app instanceof LumenApplication) {
             $this->app->configure('queue');
         }
-        
+
         $this->mergeConfigFrom(
             __DIR__.'/../config/cmq.php', 'queue.connections.cmq'
         );
