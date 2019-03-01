@@ -141,7 +141,7 @@ class CMQQueue extends Queue implements QueueContract
         $delay = method_exists($this, 'getSeconds')
             ? $this->getSeconds($delay)
             : $this->secondsUntil($delay);
-        
+
         return $this->pushRaw($payload, $queue, ['delay' => $delay]);
     }
 
