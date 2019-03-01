@@ -136,17 +136,13 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function later($delay, $job, $data = '', $queue = null)
     {
+        $payload = $this->isPlain() ? $job->getPayload() : $this->createPayload($job, $data);
+
         $delay = method_exists($this, 'getSeconds')
             ? $this->getSeconds($delay)
             : $this->secondsUntil($delay);
         
-        $payload = $this->isPlain() ? $job->getPayload() : $this->createPayload($job, $data);
-
-        return $this->pushRaw(
-            $payload,
-            $queue,
-            ['delay' => $delay]
-        );
+        return $this->pushRaw($payload, $queue, ['delay' => $delay]);
     }
 
     /**
