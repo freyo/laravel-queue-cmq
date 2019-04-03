@@ -41,10 +41,10 @@ class Subscription
             $params['protocol'] = $subscription_meta->Protocol;
         }
 
-        if (!$subscription_meta->bindindKey != null && is_array($subscription_meta->bindindKey) && !empty($subscription_meta->bindindKey)) {
+        if (!$subscription_meta->bindingKey != null && is_array($subscription_meta->bindingKey) && !empty($subscription_meta->bindingKey)) {
             $n = 1;
-            foreach ($subscription_meta->bindindKey as $tag) {
-                $key = 'bindindKey.'.$n;
+            foreach ($subscription_meta->bindingKey as $tag) {
+                $key = 'bindingKey.'.$n;
                 $params[$key] = $tag;
                 $n += 1;
             }
@@ -128,9 +128,9 @@ class Subscription
             $subscription_meta->NotifyContentFormat = $resp['notifyContentFormat'];
         }
 
-        if (isset($resp['bindindKey'])) {
-            foreach ($resp['bindindKey'] as $tag) {
-                array_push($subscription_meta->bindindKey, $tag);
+        if (isset($resp['bindingKey'])) {
+            foreach ($resp['bindingKey'] as $tag) {
+                array_push($subscription_meta->bindingKey, $tag);
             }
         }
 
@@ -162,10 +162,10 @@ class Subscription
             $params['protocol'] = $subscription_meta->Protocol;
         }
 
-        if (!$subscription_meta->bindindKey != null && is_array($subscription_meta->bindindKey) && !empty($subscription_meta->bindindKey)) {
+        if (!$subscription_meta->bindingKey != null && is_array($subscription_meta->bindingKey) && !empty($subscription_meta->bindingKey)) {
             $n = 1;
-            foreach ($subscription_meta->bindindKey as $tag) {
-                $key = 'bindindKey.'.$n;
+            foreach ($subscription_meta->bindingKey as $tag) {
+                $key = 'bindingKey.'.$n;
                 $params[$key] = $tag;
                 $n += 1;
             }

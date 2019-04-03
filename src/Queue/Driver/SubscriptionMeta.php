@@ -20,6 +20,7 @@ class SubscriptionMeta
     public $FilterTag;
     public $NotifyStrategy;
     public $NotifyContentFormat;
+    public $bindingKey;
 
     public function __construct()
     {
@@ -28,7 +29,7 @@ class SubscriptionMeta
         $this->FilterTag = [];
         $this->NotifyStrategy = 'BACKOFF_RETRY';
         $this->NotifyContentFormat = 'JSON';
-        $this->bindindKey = [];
+        $this->bindingKey = [];
     }
 
     public function __toString()
@@ -39,7 +40,7 @@ class SubscriptionMeta
             'filterTag'           => $this->FilterTag,
             'notifyStrategy'      => $this->NotifyStrategy,
             'notifyContentFormat' => $this->NotifyContentFormat,
-            'bindingKey'          => $this->bindindKey,
+            'bindingKey'          => $this->bindingKey,
         ];
 
         return json_encode($info);
