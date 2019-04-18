@@ -27,7 +27,12 @@
   <p align="center">安全可靠、扩展性高且业务可用性强的高性能分布式消息队列服务</p>
 </div>
       
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq?ref=badge_large)
+
 ## Installation
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq?ref=badge_shield)
+
 
   ```shell
   composer require freyo/laravel-queue-cmq
