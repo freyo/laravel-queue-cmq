@@ -1,7 +1,8 @@
 <div>
   <p align="center">
-    <image src="https://mc.qcloudimg.com/static/img/7fc29d4e11d2ae302cf7f77d16c78f42/CMQ.svg" width="220" height="220">
+    <image src="https://imgcache.qq.com/open_proj/proj_qcloud_v2/international/doc/css/img/icon/icon-zzj.svg" width="150" height="150">
   </p>
+  <p align="center">Tencent Cloud Message Queue Driver for Laravel Queue</p>
   <p align="center">
     <a href="LICENSE">
       <image src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License">
@@ -22,17 +23,14 @@
       <image src="https://img.shields.io/packagist/dt/freyo/laravel-queue-cmq.svg?style=flat-square" alt="Total Downloads">
     </a>
   </p>
-  <p align="center">Tencent Cloud Message Queue driver for Laravel Queue</p>
-  <p align="center">腾讯云消息队列 CMQ</p>
-  <p align="center">安全可靠、扩展性高且业务可用性强的高性能分布式消息队列服务</p>
+  <p align="center">
+    <a href="https://app.fossa.io/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq?ref=badge_small">
+      <img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq.svg?type=small" alt="FOSSA Status">
+    </a>
+  </p>
 </div>
-      
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq?ref=badge_large)
 
 ## Installation
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq?ref=badge_shield)
-
 
   ```shell
   composer require freyo/laravel-queue-cmq
@@ -227,8 +225,9 @@ class CMQPlainJobHandler
 ## References
 
 - [Product Documentation](https://cloud.tencent.com/document/product/406?lang=en)
-- [产品文档](https://cloud.tencent.com/document/product/406?lang=cn)
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffreyo%2Flaravel-queue-cmq?ref=badge_large)
