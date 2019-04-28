@@ -224,7 +224,7 @@ class CMQPlainJobHandler
 
 ## References
 
-- [Product Documentation](https://cloud.tencent.com/document/product/406?lang=en)
+- [Product Documentation](https://intl.cloud.tencent.com/document/product/406)
 
 ## License
 
