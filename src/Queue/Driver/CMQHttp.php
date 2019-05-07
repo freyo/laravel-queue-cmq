@@ -12,7 +12,7 @@ class CMQHttp
     {
         $this->connection_timeout = $connection_timeout;
         $this->keep_alive = $keep_alive;
-        $this->host = $host.''.'/v2/index.php';
+        $this->host = $host.'/v2/index.php';
         $this->curl = null;
     }
 

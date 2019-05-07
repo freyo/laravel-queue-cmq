@@ -20,15 +20,22 @@ class CMQClient
         $this->version = $version;
         $this->method = $method;
         $this->sign_method = 'HmacSHA1';
-        $this->http = new CMQHttp($this->host);
+        $this->http = new CMQHttp($host);
     }
 
     protected function process_host($host)
     {
-        if (strpos($host, 'http://') === 0 || strpos($host, 'https://') === 0) {
-            $this->host = rtrim($host, '/');
+        if (strpos($host, 'http://') === 0) {
+            $_host = substr($host, 7, strlen($host) - 7);
+        } elseif (strpos($host, 'https://') === 0) {
+            $_host = substr($host, 8, strlen($host) - 8);
         } else {
             throw new CMQClientParameterException('Only support http(s) prototol. Invalid endpoint:'.$host);
+        }
+        if ($_host[strlen($_host) - 1] == '/') {
+            $this->host = substr($_host, 0, strlen($_host) - 1);
+        } else {
+            $this->host = $_host;
         }
     }
 
