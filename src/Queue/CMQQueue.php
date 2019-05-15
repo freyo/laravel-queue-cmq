@@ -73,15 +73,15 @@ class CMQQueue extends Queue implements QueueContract
     {
         $attributes = $this->getQueue($queue)->get_attributes();
 
-        return (int)$attributes->activeMsgNum;
+        return (int) $attributes->activeMsgNum;
     }
 
     /**
      * Push a new job onto the queue.
      *
      * @param string|object $job
-     * @param mixed $data
-     * @param string $queue
+     * @param mixed         $data
+     * @param string        $queue
      *
      * @return mixed
      */
@@ -106,7 +106,7 @@ class CMQQueue extends Queue implements QueueContract
      *
      * @param string $payload
      * @param string $queue
-     * @param array $options
+     * @param array  $options
      *
      * @return mixed
      */
@@ -124,7 +124,7 @@ class CMQQueue extends Queue implements QueueContract
                     return $driver->publish_message($message->msgBody, [], $queue);
                 default:
                     throw new \InvalidArgumentException(
-                        'Invalid CMQ topic filter: ' . $this->topicOptions['filter']
+                        'Invalid CMQ topic filter: '.$this->topicOptions['filter']
                     );
             }
         }
@@ -136,9 +136,9 @@ class CMQQueue extends Queue implements QueueContract
      * Push a new job onto the queue after a delay.
      *
      * @param \DateTimeInterface|\DateInterval|int $delay
-     * @param string|object $job
-     * @param mixed $data
-     * @param string $queue
+     * @param string|object                        $job
+     * @param mixed                                $data
+     * @param string                               $queue
      *
      * @return mixed
      */
@@ -175,9 +175,10 @@ class CMQQueue extends Queue implements QueueContract
             $queue = $this->getQueue($queue);
             $message = $queue->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
-            if ((int)$e->getCode() === self::CMQ_QUEUE_NO_MESSAGE_CODE) { //ignore no message
-                return null;
+            if ((int) $e->getCode() === self::CMQ_QUEUE_NO_MESSAGE_CODE) { //ignore no message
+                return;
             }
+
             throw $e;
         }
 
