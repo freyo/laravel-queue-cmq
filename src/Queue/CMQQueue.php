@@ -73,7 +73,7 @@ class CMQQueue extends Queue implements QueueContract
     {
         $attributes = $this->getQueue($queue)->get_attributes();
 
-        return (int) $attributes->activeMsgNum;
+        return (int)$attributes->activeMsgNum;
     }
 
     /**
@@ -106,7 +106,7 @@ class CMQQueue extends Queue implements QueueContract
      *
      * @param string $payload
      * @param string $queue
-     * @param array  $options
+     * @param array $options
      *
      * @return mixed
      */
@@ -117,39 +117,47 @@ class CMQQueue extends Queue implements QueueContract
         $driver = $this->parseQueue($queue);
 
         if ($driver instanceof Topic) {
-            $vTagList = [];
-            if ($this->topicOptions['filter'] === self::CMQ_TOPIC_TAG_FILTER_NAME) {
-                $vTagList = explode(',', $queue);
+            switch ($this->topicOptions['filter']) {
+                case self::CMQ_TOPIC_TAG_FILTER_NAME:
+                    return $driver->publish_message($message->msgBody, explode(',', $queue), null);
+                case self::CMQ_TOPIC_ROUTING_FILTER_NAME:
+                    return $driver->publish_message($message->msgBody, [], $queue);
+                default:
+                    throw new \InvalidArgumentException(
+                        'Invalid CMQ topic filter: ' . $this->topicOptions['filter']
+                    );
             }
-
-            $routingKey = null;
-            if ($this->topicOptions['filter'] === self::CMQ_TOPIC_ROUTING_FILTER_NAME) {
-                $routingKey = $queue;
-            }
-
-            return $driver->publish_message($message->msgBody, $vTagList, $routingKey);
         }
 
-        return $driver->send_message($message, array_get($options, 'delay', 0));
+        return $driver->send_message($message, Arr::get($options, 'delay', 0));
     }
 
     /**
      * Push a new job onto the queue after a delay.
      *
      * @param \DateTimeInterface|\DateInterval|int $delay
-     * @param string|object                        $job
-     * @param mixed                                $data
-     * @param string                               $queue
+     * @param string|object $job
+     * @param mixed $data
+     * @param string $queue
      *
      * @return mixed
      */
     public function later($delay, $job, $data = '', $queue = null)
     {
-        $payload = $this->isPlain() ? $job->getPayload() : $this->createPayload($job, $data);
-
         $delay = method_exists($this, 'getSeconds')
             ? $this->getSeconds($delay)
             : $this->secondsUntil($delay);
+
+        if ($this->isPlain()) {
+            return $this->pushRaw($job->getPayload(), $queue, ['delay' => $delay]);
+        }
+
+        $reflection = new \ReflectionMethod($this, 'createPayload');
+        if ($reflection->getNumberOfParameters() === 3) { // version >= 5.7
+            $payload = $this->createPayload($job, $queue, $data);
+        } else {
+            $payload = $this->createPayload($job, $data);
+        }
 
         return $this->pushRaw($payload, $queue, ['delay' => $delay]);
     }
@@ -167,10 +175,9 @@ class CMQQueue extends Queue implements QueueContract
             $queue = $this->getQueue($queue);
             $message = $queue->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
-            if ($e->getCode() == self::CMQ_QUEUE_NO_MESSAGE_CODE) { //ignore no message
-                return;
+            if ((int)$e->getCode() === self::CMQ_QUEUE_NO_MESSAGE_CODE) { //ignore no message
+                return null;
             }
-
             throw $e;
         }
 
@@ -211,13 +218,9 @@ class CMQQueue extends Queue implements QueueContract
     public function parseQueue($queue = null)
     {
         if ($this->topicOptions['enable']) {
-            $exchangeName = $this->topicOptions['name'] ?: $queue;
-
-            return $this->getTopic($exchangeName);
+            return $this->getTopic($this->topicOptions['name'] ?: $queue);
         }
 
-        $queueName = $queue ?: $this->queueOptions['name'];
-
-        return $this->getQueue($queueName);
+        return $this->getQueue($queue ?: $this->queueOptions['name']);
     }
 }
