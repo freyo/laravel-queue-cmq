@@ -80,14 +80,23 @@ class CMQQueue extends Queue implements QueueContract
      * Push a new job onto the queue.
      *
      * @param string|object $job
-     * @param mixed         $data
-     * @param string        $queue
+     * @param mixed $data
+     * @param string $queue
      *
      * @return mixed
      */
     public function push($job, $data = '', $queue = null)
     {
-        $payload = $this->isPlain() ? $job->getPayload() : $this->createPayload($job, $data);
+        if ($this->isPlain()) {
+            return $this->pushRaw($job->getPayload(), $queue);
+        }
+
+        $reflection = new \ReflectionMethod($this, 'createPayload');
+        if ($reflection->getNumberOfParameters() === 3) { // version >= 5.7
+            $payload = $this->createPayload($job, $queue, $data);
+        } else {
+            $payload = $this->createPayload($job, $data);
+        }
 
         return $this->pushRaw($payload, $queue);
     }
