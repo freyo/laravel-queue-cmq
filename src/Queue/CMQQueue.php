@@ -84,6 +84,7 @@ class CMQQueue extends Queue implements QueueContract
      * @param string $queue
      *
      * @return mixed
+     * @throws \ReflectionException
      */
     public function push($job, $data = '', $queue = null)
     {
@@ -108,7 +109,9 @@ class CMQQueue extends Queue implements QueueContract
      * @param string $queue
      * @param array $options
      *
-     * @return mixed
+     * @return \Freyo\LaravelQueueCMQ\Queue\Driver\Message|array
+     * @throws \Freyo\LaravelQueueCMQ\Queue\Driver\CMQServerNetworkException
+     * @throws \Freyo\LaravelQueueCMQ\Queue\Driver\CMQServerException
      */
     public function pushRaw($payload, $queue = null, array $options = [])
     {
@@ -141,6 +144,7 @@ class CMQQueue extends Queue implements QueueContract
      * @param string $queue
      *
      * @return mixed
+     * @throws \ReflectionException
      */
     public function later($delay, $job, $data = '', $queue = null)
     {
