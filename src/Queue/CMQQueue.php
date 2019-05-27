@@ -85,6 +85,7 @@ class CMQQueue extends Queue implements QueueContract
      *
      * @return mixed
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function push($job, $data = '', $queue = null)
     {
@@ -112,6 +113,7 @@ class CMQQueue extends Queue implements QueueContract
      * @return \Freyo\LaravelQueueCMQ\Queue\Driver\Message|array
      * @throws \Freyo\LaravelQueueCMQ\Queue\Driver\CMQServerNetworkException
      * @throws \Freyo\LaravelQueueCMQ\Queue\Driver\CMQServerException
+     * @throws \Exception
      */
     public function pushRaw($payload, $queue = null, array $options = [])
     {
@@ -122,9 +124,13 @@ class CMQQueue extends Queue implements QueueContract
         if ($driver instanceof Topic) {
             switch ($this->topicOptions['filter']) {
                 case self::CMQ_TOPIC_TAG_FILTER_NAME:
-                    return $driver->publish_message($message->msgBody, explode(',', $queue), null);
+                    return retry(3, function () use ($driver, $message, $queue) {
+                        return $driver->publish_message($message->msgBody, explode(',', $queue), null);
+                    });
                 case self::CMQ_TOPIC_ROUTING_FILTER_NAME:
-                    return $driver->publish_message($message->msgBody, [], $queue);
+                    return retry(3, function () use ($driver, $message, $queue) {
+                        $driver->publish_message($message->msgBody, [], $queue);
+                    });
                 default:
                     throw new \InvalidArgumentException(
                         'Invalid CMQ topic filter: ' . $this->topicOptions['filter']
@@ -132,7 +138,9 @@ class CMQQueue extends Queue implements QueueContract
             }
         }
 
-        return $driver->send_message($message, Arr::get($options, 'delay', 0));
+        return retry(3, function () use ($driver, $message, $options) {
+            return $driver->send_message($message, Arr::get($options, 'delay', 0));
+        });
     }
 
     /**
@@ -145,6 +153,7 @@ class CMQQueue extends Queue implements QueueContract
      *
      * @return mixed
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function later($delay, $job, $data = '', $queue = null)
     {
@@ -179,7 +188,7 @@ class CMQQueue extends Queue implements QueueContract
             $queue = $this->getQueue($queue);
             $message = $queue->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
-            if ((int)$e->getCode() === self::CMQ_QUEUE_NO_MESSAGE_CODE) { //ignore no message
+            if (self::CMQ_QUEUE_NO_MESSAGE_CODE === (int)$e->getCode()) { //ignore no message
                 return null;
             }
             throw $e;
