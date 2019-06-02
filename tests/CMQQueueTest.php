@@ -29,14 +29,14 @@ class CMQQueueTest extends TestCase
                     'host'                 => env('CMQ_QUEUE_HOST', 'https://cmq-queue-region.api.qcloud.com'),
                     'name'                 => env('CMQ_QUEUE', 'default'),
                     'polling_wait_seconds' => env('CMQ_QUEUE_POLLING_WAIT_SECONDS', 0), //0-30seconds
-                    'retries'              => env('CMQ_QUEUE_RETRIES', 1),
+                    'retries'              => env('CMQ_QUEUE_RETRIES', 3),
                 ],
                 'topic' => [
                     'enable'  => env('CMQ_TOPIC_ENABLE', false),
                     'filter'  => env('CMQ_TOPIC_FILTER', 'routing'), //routing or msgtag
                     'host'    => env('CMQ_TOPIC_HOST', 'https://cmq-topic-region.api.qcloud.com'),
                     'name'    => env('CMQ_TOPIC'),
-                    'retries' => env('CMQ_TOPIC_RETRIES', 1),
+                    'retries' => env('CMQ_TOPIC_RETRIES', 3),
                 ],
             ],
 

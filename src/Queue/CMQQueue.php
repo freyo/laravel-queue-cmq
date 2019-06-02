@@ -40,6 +40,13 @@ class CMQQueue extends Queue implements QueueContract
      */
     private static $createPayload;
 
+    /**
+     * CMQQueue constructor.
+     * @param Account $queueAccount
+     * @param Account $topicAccount
+     * @param array $config
+     * @throws \ReflectionException
+     */
     public function __construct(Account $queueAccount, Account $topicAccount, array $config)
     {
         $this->queueAccount = $queueAccount;
@@ -129,12 +136,12 @@ class CMQQueue extends Queue implements QueueContract
         if ($driver instanceof Topic) {
             switch ($this->topicOptions['filter']) {
                 case self::CMQ_TOPIC_TAG_FILTER_NAME:
-                    return retry(Arr::get($this->topicOptions, 'retries', 1),
+                    return retry(Arr::get($this->topicOptions, 'retries', 3),
                         function () use ($driver, $message, $queue) {
                             return $driver->publish_message($message->msgBody, explode(',', $queue), null);
                         });
                 case self::CMQ_TOPIC_ROUTING_FILTER_NAME:
-                    return retry(Arr::get($this->topicOptions, 'retries', 1),
+                    return retry(Arr::get($this->topicOptions, 'retries', 3),
                         function () use ($driver, $message, $queue) {
                             $driver->publish_message($message->msgBody, [], $queue);
                         });
@@ -145,7 +152,7 @@ class CMQQueue extends Queue implements QueueContract
             }
         }
 
-        return retry(Arr::get($this->queueOptions, 'retries', 1), function () use ($driver, $message, $options) {
+        return retry(Arr::get($this->queueOptions, 'retries', 3), function () use ($driver, $message, $options) {
             return $driver->send_message($message, Arr::get($options, 'delay', 0));
         });
     }
