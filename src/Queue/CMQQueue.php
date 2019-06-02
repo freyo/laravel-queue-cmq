@@ -35,6 +35,11 @@ class CMQQueue extends Queue implements QueueContract
      */
     protected $plainOptions;
 
+    /**
+     * @var \ReflectionMethod
+     */
+    private static $createPayload;
+
     public function __construct(Account $queueAccount, Account $topicAccount, array $config)
     {
         $this->queueAccount = $queueAccount;
@@ -44,6 +49,8 @@ class CMQQueue extends Queue implements QueueContract
         $this->topicOptions = $config['options']['topic'];
 
         $this->plainOptions = Arr::get($config, 'plain', []);
+
+        self::$createPayload = new \ReflectionMethod($this, 'createPayload');
     }
 
     /**
@@ -84,7 +91,6 @@ class CMQQueue extends Queue implements QueueContract
      * @param string $queue
      *
      * @return mixed
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function push($job, $data = '', $queue = null)
@@ -93,8 +99,7 @@ class CMQQueue extends Queue implements QueueContract
             return $this->pushRaw($job->getPayload(), $queue);
         }
 
-        $reflection = new \ReflectionMethod($this, 'createPayload');
-        if ($reflection->getNumberOfParameters() === 3) { // version >= 5.7
+        if (self::$createPayload->getNumberOfParameters() === 3) { // version >= 5.7
             $payload = $this->createPayload($job, $queue, $data);
         } else {
             $payload = $this->createPayload($job, $data);
@@ -124,13 +129,15 @@ class CMQQueue extends Queue implements QueueContract
         if ($driver instanceof Topic) {
             switch ($this->topicOptions['filter']) {
                 case self::CMQ_TOPIC_TAG_FILTER_NAME:
-                    return retry(3, function () use ($driver, $message, $queue) {
-                        return $driver->publish_message($message->msgBody, explode(',', $queue), null);
-                    });
+                    return retry(Arr::get($this->topicOptions, 'retries', 1),
+                        function () use ($driver, $message, $queue) {
+                            return $driver->publish_message($message->msgBody, explode(',', $queue), null);
+                        });
                 case self::CMQ_TOPIC_ROUTING_FILTER_NAME:
-                    return retry(3, function () use ($driver, $message, $queue) {
-                        $driver->publish_message($message->msgBody, [], $queue);
-                    });
+                    return retry(Arr::get($this->topicOptions, 'retries', 1),
+                        function () use ($driver, $message, $queue) {
+                            $driver->publish_message($message->msgBody, [], $queue);
+                        });
                 default:
                     throw new \InvalidArgumentException(
                         'Invalid CMQ topic filter: ' . $this->topicOptions['filter']
@@ -138,7 +145,7 @@ class CMQQueue extends Queue implements QueueContract
             }
         }
 
-        return retry(3, function () use ($driver, $message, $options) {
+        return retry(Arr::get($this->queueOptions, 'retries', 1), function () use ($driver, $message, $options) {
             return $driver->send_message($message, Arr::get($options, 'delay', 0));
         });
     }
@@ -152,7 +159,6 @@ class CMQQueue extends Queue implements QueueContract
      * @param string $queue
      *
      * @return mixed
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function later($delay, $job, $data = '', $queue = null)
@@ -165,8 +171,7 @@ class CMQQueue extends Queue implements QueueContract
             return $this->pushRaw($job->getPayload(), $queue, ['delay' => $delay]);
         }
 
-        $reflection = new \ReflectionMethod($this, 'createPayload');
-        if ($reflection->getNumberOfParameters() === 3) { // version >= 5.7
+        if (self::$createPayload->getNumberOfParameters() === 3) { // version >= 5.7
             $payload = $this->createPayload($job, $queue, $data);
         } else {
             $payload = $this->createPayload($job, $data);
