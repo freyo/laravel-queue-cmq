@@ -22,12 +22,20 @@ class CMQQueue extends Queue implements QueueContract
      * @var array
      */
     protected $queueOptions;
+
+    /**
+     * @var array
+     */
     protected $topicOptions;
 
     /**
      * @var Account
      */
     private $queueAccount;
+
+    /**
+     * @var Account
+     */
     private $topicAccount;
 
     /**
@@ -42,9 +50,11 @@ class CMQQueue extends Queue implements QueueContract
 
     /**
      * CMQQueue constructor.
+     *
      * @param Account $queueAccount
      * @param Account $topicAccount
      * @param array $config
+     *
      * @throws \ReflectionException
      */
     public function __construct(Account $queueAccount, Account $topicAccount, array $config)
@@ -65,7 +75,7 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function isPlain()
     {
-        return Arr::get($this->plainOptions, 'enable', false);
+        return (bool)Arr::get($this->plainOptions, 'enable');
     }
 
     /**
@@ -106,11 +116,9 @@ class CMQQueue extends Queue implements QueueContract
             return $this->pushRaw($job->getPayload(), $queue);
         }
 
-        if (self::$createPayload->getNumberOfParameters() === 3) { // version >= 5.7
-            $payload = $this->createPayload($job, $queue, $data);
-        } else {
-            $payload = $this->createPayload($job, $data);
-        }
+        $payload = self::$createPayload->getNumberOfParameters() === 3
+            ? $this->createPayload($job, $queue, $data) // version >= 5.7
+            : $this->createPayload($job, $data);
 
         return $this->pushRaw($payload, $queue);
     }
@@ -178,11 +186,9 @@ class CMQQueue extends Queue implements QueueContract
             return $this->pushRaw($job->getPayload(), $queue, ['delay' => $delay]);
         }
 
-        if (self::$createPayload->getNumberOfParameters() === 3) { // version >= 5.7
-            $payload = $this->createPayload($job, $queue, $data);
-        } else {
-            $payload = $this->createPayload($job, $data);
-        }
+        $payload = self::$createPayload->getNumberOfParameters() === 3
+            ? $this->createPayload($job, $queue, $data) // version >= 5.7
+            : $this->createPayload($job, $data);
 
         return $this->pushRaw($payload, $queue, ['delay' => $delay]);
     }
@@ -200,7 +206,7 @@ class CMQQueue extends Queue implements QueueContract
             $queue = $this->getQueue($queue);
             $message = $queue->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
-            if (self::CMQ_QUEUE_NO_MESSAGE_CODE === (int)$e->getCode()) { //ignore no message
+            if (self::CMQ_QUEUE_NO_MESSAGE_CODE === (int)$e->getCode()) { // ignore no message
                 return null;
             }
             throw $e;

@@ -15,6 +15,7 @@ class CMQConnector implements ConnectorInterface
      * @param array $config
      *
      * @return \Illuminate\Contracts\Queue\Queue
+     * @throws \ReflectionException
      */
     public function connect(array $config)
     {
