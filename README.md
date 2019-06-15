@@ -214,6 +214,9 @@ class CMQPlainJobHandler
         // processing your payload...
         var_dump($payload);
         
+        // release back to the queue manually when failed.
+        // $job->release();
+        
         // delete message when processed.
         if (! $job->isDeletedOrReleased()) {
             $job->delete();
