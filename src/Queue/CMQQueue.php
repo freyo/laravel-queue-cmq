@@ -29,12 +29,12 @@ class CMQQueue extends Queue implements QueueContract
     protected $topicOptions;
 
     /**
-     * @var Account
+     * @var \Freyo\LaravelQueueCMQ\Queue\Driver\Account
      */
     private $queueAccount;
 
     /**
-     * @var Account
+     * @var \Freyo\LaravelQueueCMQ\Queue\Driver\Account
      */
     private $topicAccount;
 
@@ -46,13 +46,13 @@ class CMQQueue extends Queue implements QueueContract
     /**
      * @var \ReflectionMethod
      */
-    private static $createPayload;
+    private $createPayload;
 
     /**
      * CMQQueue constructor.
      *
-     * @param Account $queueAccount
-     * @param Account $topicAccount
+     * @param \Freyo\LaravelQueueCMQ\Queue\Driver\Account $queueAccount
+     * @param \Freyo\LaravelQueueCMQ\Queue\Driver\Account $topicAccount
      * @param array $config
      *
      * @throws \ReflectionException
@@ -67,7 +67,7 @@ class CMQQueue extends Queue implements QueueContract
 
         $this->plainOptions = Arr::get($config, 'plain', []);
 
-        self::$createPayload = new \ReflectionMethod($this, 'createPayload');
+        $this->createPayload = new \ReflectionMethod($this, 'createPayload');
     }
 
     /**
@@ -116,7 +116,7 @@ class CMQQueue extends Queue implements QueueContract
             return $this->pushRaw($job->getPayload(), $queue);
         }
 
-        $payload = self::$createPayload->getNumberOfParameters() === 3
+        $payload = $this->createPayload->getNumberOfParameters() === 3
             ? $this->createPayload($job, $queue, $data) // version >= 5.7
             : $this->createPayload($job, $data);
 
@@ -186,7 +186,7 @@ class CMQQueue extends Queue implements QueueContract
             return $this->pushRaw($job->getPayload(), $queue, ['delay' => $delay]);
         }
 
-        $payload = self::$createPayload->getNumberOfParameters() === 3
+        $payload = $this->createPayload->getNumberOfParameters() === 3
             ? $this->createPayload($job, $queue, $data) // version >= 5.7
             : $this->createPayload($job, $data);
 
@@ -212,7 +212,7 @@ class CMQQueue extends Queue implements QueueContract
             throw $e;
         }
 
-        return new CMQJob($this->container, $this, $message, $queue);
+        return new CMQJob($this->container, $this, $message, $queue, $this->connectionName);
     }
 
     /**
