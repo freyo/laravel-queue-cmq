@@ -53,7 +53,7 @@ class CMQQueue extends Queue implements QueueContract
      *
      * @param \Freyo\LaravelQueueCMQ\Queue\Driver\Account $queueAccount
      * @param \Freyo\LaravelQueueCMQ\Queue\Driver\Account $topicAccount
-     * @param array $config
+     * @param array                                       $config
      *
      * @throws \ReflectionException
      */
@@ -75,7 +75,7 @@ class CMQQueue extends Queue implements QueueContract
      */
     public function isPlain()
     {
-        return (bool)Arr::get($this->plainOptions, 'enable');
+        return (bool) Arr::get($this->plainOptions, 'enable');
     }
 
     /**
@@ -97,18 +97,19 @@ class CMQQueue extends Queue implements QueueContract
     {
         $attributes = $this->getQueue($queue)->get_attributes();
 
-        return (int)$attributes->activeMsgNum;
+        return (int) $attributes->activeMsgNum;
     }
 
     /**
      * Push a new job onto the queue.
      *
      * @param string|object $job
-     * @param mixed $data
-     * @param string $queue
+     * @param mixed         $data
+     * @param string        $queue
+     *
+     * @throws \Exception
      *
      * @return mixed
-     * @throws \Exception
      */
     public function push($job, $data = '', $queue = null)
     {
@@ -128,12 +129,13 @@ class CMQQueue extends Queue implements QueueContract
      *
      * @param string $payload
      * @param string $queue
-     * @param array $options
+     * @param array  $options
      *
-     * @return \Freyo\LaravelQueueCMQ\Queue\Driver\Message|array
      * @throws \Freyo\LaravelQueueCMQ\Queue\Driver\CMQServerNetworkException
      * @throws \Freyo\LaravelQueueCMQ\Queue\Driver\CMQServerException
      * @throws \Exception
+     *
+     * @return \Freyo\LaravelQueueCMQ\Queue\Driver\Message|array
      */
     public function pushRaw($payload, $queue = null, array $options = [])
     {
@@ -155,7 +157,7 @@ class CMQQueue extends Queue implements QueueContract
                         });
                 default:
                     throw new \InvalidArgumentException(
-                        'Invalid CMQ topic filter: ' . $this->topicOptions['filter']
+                        'Invalid CMQ topic filter: '.$this->topicOptions['filter']
                     );
             }
         }
@@ -169,12 +171,13 @@ class CMQQueue extends Queue implements QueueContract
      * Push a new job onto the queue after a delay.
      *
      * @param \DateTimeInterface|\DateInterval|int $delay
-     * @param string|object $job
-     * @param mixed $data
-     * @param string $queue
+     * @param string|object                        $job
+     * @param mixed                                $data
+     * @param string                               $queue
+     *
+     * @throws \Exception
      *
      * @return mixed
-     * @throws \Exception
      */
     public function later($delay, $job, $data = '', $queue = null)
     {
@@ -206,9 +209,10 @@ class CMQQueue extends Queue implements QueueContract
             $queue = $this->getQueue($queue);
             $message = $queue->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
-            if (self::CMQ_QUEUE_NO_MESSAGE_CODE === (int)$e->getCode()) { // ignore no message
-                return null;
+            if (self::CMQ_QUEUE_NO_MESSAGE_CODE === (int) $e->getCode()) { // ignore no message
+                return;
             }
+
             throw $e;
         }
 

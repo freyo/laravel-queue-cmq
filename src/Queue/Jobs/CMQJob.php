@@ -24,11 +24,11 @@ class CMQJob extends Job implements JobContract
     /**
      * Create a new job instance.
      *
-     * @param \Illuminate\Container\Container $container
-     * @param \Freyo\LaravelQueueCMQ\Queue\CMQQueue $connection
+     * @param \Illuminate\Container\Container             $container
+     * @param \Freyo\LaravelQueueCMQ\Queue\CMQQueue       $connection
      * @param \Freyo\LaravelQueueCMQ\Queue\Driver\Message $message
-     * @param \Freyo\LaravelQueueCMQ\Queue\Driver\Queue $queue
-     * @param string $connectionName
+     * @param \Freyo\LaravelQueueCMQ\Queue\Driver\Queue   $queue
+     * @param string                                      $connectionName
      */
     public function __construct(Container $container, CMQQueue $connection, Message $message, Queue $queue, $connectionName)
     {
