@@ -116,12 +116,14 @@ Configure `config/queue.php`
                 'host'                 => 'https://cmq-queue-region.api.qcloud.com',
                 'name'                 => 'your-queue-name',
                 'polling_wait_seconds' => 0, // 0-30 seconds
+                'retries'              => 3,
             ],
             'topic' => [
-                'enable' => false,
-                'filter' => 'routing', // routing or msgtag
-                'host'   => 'https://cmq-topic-region.api.qcloud.com',
-                'name'   => '',
+                'enable'  => false,
+                'filter'  => 'routing', // routing or msgtag
+                'host'    => 'https://cmq-topic-region.api.qcloud.com',
+                'name'    => 'your-topic-name',
+                'retries' => 3,
             ],
         ],
         'plain' => [
