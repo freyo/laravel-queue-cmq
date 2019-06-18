@@ -148,9 +148,7 @@ CMQ_PLAIN_ENABLE=true
 CMQ_PLAIN_JOB=App\Jobs\CMQPlainJobHandler@handle
 ```
 
-Create a job implements `PlainPayload` interface. 
-
-The method `getPayload` must return a sting value.
+Create a job implements `PlainPayload` interface. The method `getPayload` must return a sting value.
 
 ```php
 <?php
@@ -160,11 +158,12 @@ namespace App\Jobs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Freyo\LaravelQueueCMQ\Queue\Contracts\PlainPayload;
 
 class CMQPlainJob implements ShouldQueue, PlainPayload
 {
-    use InteractsWithQueue, Queueable;
+    use Dispatchable, InteractsWithQueue, Queueable;
     
     protected $payload;
 
