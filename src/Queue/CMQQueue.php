@@ -7,6 +7,7 @@ use Freyo\LaravelQueueCMQ\Queue\Driver\CMQServerException;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Message;
 use Freyo\LaravelQueueCMQ\Queue\Driver\Topic;
 use Freyo\LaravelQueueCMQ\Queue\Jobs\CMQJob;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\Queue;
 use Illuminate\Support\Arr;
@@ -210,13 +211,16 @@ class CMQQueue extends Queue implements QueueContract
             $message = $queue->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
             if (self::CMQ_QUEUE_NO_MESSAGE_CODE === (int) $e->getCode()) { // ignore no message
-                return;
+                return null;
             }
 
             throw $e;
         }
 
-        return new CMQJob($this->container, $this, $message, $queue, $this->connectionName);
+        return new CMQJob(
+            $this->container ?: Container::getInstance(),
+            $this, $message, $queue, $this->connectionName
+        );
     }
 
     /**
