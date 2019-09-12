@@ -211,7 +211,7 @@ class CMQQueue extends Queue implements QueueContract
             $message = $queue->receive_message($this->queueOptions['polling_wait_seconds']);
         } catch (CMQServerException $e) {
             if (self::CMQ_QUEUE_NO_MESSAGE_CODE === (int) $e->getCode()) { // ignore no message
-                return null;
+                return;
             }
 
             throw $e;
