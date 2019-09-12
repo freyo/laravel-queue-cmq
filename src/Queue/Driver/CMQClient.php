@@ -99,7 +99,7 @@ class CMQClient
         }
 
         if (!isset($_params['Nonce'])) {
-            $_params['Nonce'] = rand(1, 65535);
+            $_params['Nonce'] = (int)(microtime(TRUE) * 1000) + rand(500000, 100000000);
         }
 
         if (!isset($_params['Timestamp'])) {
