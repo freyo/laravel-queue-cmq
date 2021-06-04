@@ -3,14 +3,14 @@
     "description": "Queue Adapter for Tencent Qcloud CMQ SDK",
     "keywords": ["laravel-queue", "cmq", "qcloud"],
     "require": {
-        "php": ">=5.6.4",
-        "illuminate/queue": "5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*",
+        "php": "^7.2",
+        "illuminate/queue": "^6.0|^7.0",
         "ext-json": "*",
         "ext-curl": "*"
     },
     "require-dev": {
-        "php": ">=5.6.4",
-        "phpunit/phpunit": "~4.8",
+        "php": "^7.2",
+        "phpunit/phpunit": "^8.4",
         "vlucas/phpdotenv": "^3.3"
     },
     "autoload": {
